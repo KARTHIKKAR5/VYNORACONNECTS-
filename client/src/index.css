@@ -1,0 +1,321 @@
+/* ==========================================================================
+   Vynora Connect - Day 1 Styling & Layout
+   ========================================================================== */
+
+:root {
+  --bg-primary: #0b0f19;
+  --bg-secondary: #111827;
+  --bg-card: #182234;
+  --bg-card-hover: #1f2b42;
+  --border-color: #1f293d;
+  --border-highlight: #3b82f6;
+  --text-main: #f3f4f6;
+  --text-muted: #9ca3af;
+  --text-dim: #6b7280;
+  --primary-color: #3b82f6;
+  --sidebar-width: 230px;
+  --navbar-height: 64px;
+}
+
+/* Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  min-height: 100vh;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* App Root & Shell */
+.app-root, .app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Navbar */
+.navbar {
+  height: var(--navbar-height);
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.nav-brand h1 {
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #ffffff;
+  text-transform: uppercase;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-icon-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.nav-icon-btn:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-highlight);
+  transform: translateY(-1px);
+}
+
+.nav-icon-btn .icon {
+  font-size: 1rem;
+}
+
+/* Layout: Sidebar + Main Content */
+.app-layout {
+  display: flex;
+  flex: 1;
+}
+
+/* Sidebar */
+.sidebar {
+  width: var(--sidebar-width);
+  background-color: var(--bg-secondary);
+  border-right: 1px solid var(--border-color);
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.sidebar-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sidebar-item {
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  padding: 10px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sidebar-bullet {
+  color: var(--text-dim);
+  font-size: 0.65rem;
+}
+
+.sidebar-item:hover {
+  color: var(--text-main);
+  background-color: var(--bg-card);
+}
+
+.sidebar-item.active {
+  color: #ffffff;
+  background-color: var(--bg-card);
+  border-left: 3px solid var(--primary-color);
+}
+
+.sidebar-bottom {
+  margin-top: 32px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border-color);
+}
+
+/* Main Content Area (Home) */
+.app-main-content {
+  flex: 1;
+  padding: 36px 48px;
+  overflow-y: auto;
+  max-width: 1000px;
+}
+
+.home-container {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* Welcome Section */
+.welcome-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.welcome-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+}
+
+.welcome-tagline {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.welcome-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+
+/* Quick Actions Section */
+.quick-actions-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.quick-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+}
+
+.action-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.action-card:hover {
+  background-color: var(--bg-card-hover);
+  border-color: var(--border-highlight);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+.action-icon {
+  font-size: 1.6rem;
+}
+
+.action-title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+/* Activity Section */
+.activity-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.activity-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.activity-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 16px 20px;
+}
+
+.activity-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.activity-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.activity-item:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.activity-item-icon {
+  font-size: 1.25rem;
+  background: rgba(255, 255, 255, 0.04);
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.activity-item-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.activity-item-text {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #f3f4f6;
+}
+
+.activity-item-time {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .app-layout {
+    flex-direction: column;
+  }
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+  }
+  .app-main-content {
+    padding: 24px 20px;
+  }
+  .quick-actions-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
