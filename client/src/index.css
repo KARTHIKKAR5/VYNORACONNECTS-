@@ -234,47 +234,89 @@ body {
   color: #ffffff;
 }
 
-/* Activity Section */
-.activity-section {
+/* ==========================================================================
+   Activity & Preview Sections (Day 2 Data-Driven Dashboard)
+   ========================================================================== */
+
+/* Section Headers */
+.section-header {
   display: flex;
-  flex-direction: column;
-  gap: 14px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
 }
 
-.activity-title {
+.section-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.section-main-heading {
   font-size: 1.15rem;
   font-weight: 700;
   color: #ffffff;
 }
 
-.activity-card {
+.section-badge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  background: rgba(59, 130, 246, 0.15);
+  color: #93c5fd;
+  border: 1px solid rgba(59, 130, 246, 0.25);
+}
+
+.section-tagline {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+}
+
+/* Activity Section */
+.activity-section,
+.pulse-section,
+.preview-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.activity-cards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Activity Card Item */
+.activity-card-item {
   background-color: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: 10px;
-  padding: 16px 20px;
+  padding: 16px 18px;
+  transition: all 0.2s ease;
 }
 
-.activity-list {
-  list-style: none;
+.activity-card-item:hover {
+  background-color: var(--bg-card-hover);
+  border-color: rgba(59, 130, 246, 0.4);
+  transform: translateX(2px);
+}
+
+.activity-card-header {
   display: flex;
-  flex-direction: column;
-  gap: 14px;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
 }
 
-.activity-item {
+.activity-card-icon-title {
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  gap: 12px;
 }
 
-.activity-item:last-child {
-  padding-bottom: 0;
-  border-bottom: none;
-}
-
-.activity-item-icon {
+.activity-card-icon {
   font-size: 1.25rem;
   background: rgba(255, 255, 255, 0.04);
   width: 36px;
@@ -286,23 +328,216 @@ body {
   flex-shrink: 0;
 }
 
-.activity-item-content {
+.activity-card-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.activity-card-type {
+  display: inline-block;
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.activity-card-status {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.activity-card-desc {
+  font-size: 0.86rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+  margin-bottom: 8px;
+}
+
+.activity-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.activity-card-time {
+  font-size: 0.74rem;
+  color: var(--text-dim);
+}
+
+/* Pulse Section */
+.pulse-indicator-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background-color: #10b981;
+  box-shadow: 0 0 10px #10b981;
+}
+
+.pulse-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
+}
+
+/* Preview Section & Cards (Events, Projects, Opportunities) */
+.preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.preview-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 18px;
+  transition: all 0.2s ease;
   display: flex;
   flex-direction: column;
 }
 
-.activity-item-text {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #f3f4f6;
+.preview-card:hover {
+  background-color: var(--bg-card-hover);
+  border-color: var(--border-highlight);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
 }
 
-.activity-item-time {
-  font-size: 0.75rem;
+.preview-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.preview-card-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 6px;
+}
+
+.preview-card-desc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+  margin-bottom: 12px;
+  flex: 1;
+}
+
+/* Badges */
+.badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+.badge-event {
+  background: rgba(168, 85, 247, 0.15);
+  color: #c084fc;
+  border: 1px solid rgba(168, 85, 247, 0.3);
+}
+
+.badge-project {
+  background: rgba(6, 182, 212, 0.15);
+  color: #67e8f9;
+  border: 1px solid rgba(6, 182, 212, 0.3);
+}
+
+.badge-opp {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fcd34d;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+/* Meta Labels */
+.preview-meta-date,
+.preview-meta-location,
+.preview-meta-deadline,
+.preview-meta-org {
+  font-size: 0.78rem;
   color: var(--text-dim);
 }
 
-/* Responsive */
+.preview-meta-deadline {
+  color: #fbbf24;
+}
+
+.preview-meta-location,
+.preview-meta-org {
+  margin-top: 4px;
+}
+
+/* Technologies Tag List */
+.tech-tags-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: auto;
+}
+
+.tech-tag {
+  font-size: 0.72rem;
+  font-family: monospace;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
+}
+
+/* Empty State Card */
+.empty-state-card {
+  background-color: var(--bg-card);
+  border: 1px dashed var(--border-color);
+  border-radius: 10px;
+  padding: 32px 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.empty-state-icon {
+  font-size: 2rem;
+  margin-bottom: 4px;
+}
+
+.empty-state-text {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.empty-state-sub {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
+
+/* ==========================================================================
+   Responsive Breakpoints
+   ========================================================================== */
+
+@media (max-width: 900px) {
+  .app-main-content {
+    padding: 28px 24px;
+  }
+  .pulse-cards-grid,
+  .preview-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 768px) {
   .app-layout {
     flex-direction: column;
@@ -311,11 +546,22 @@ body {
     width: 100%;
     border-right: none;
     border-bottom: 1px solid var(--border-color);
+    padding: 16px;
+  }
+  .sidebar-links {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .sidebar-bottom {
+    margin-top: 12px;
+    padding-top: 12px;
   }
   .app-main-content {
-    padding: 24px 20px;
+    padding: 20px 16px;
   }
   .quick-actions-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
