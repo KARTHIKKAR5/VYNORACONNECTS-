@@ -1,0 +1,356 @@
+/* =========================================
+   VYNORA CONNECT — GLOBAL PAGE
+========================================= */
+
+#root {
+  min-height: 100vh;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #101010;
+  color: #f5f5f5;
+  font-family: Inter, Arial, sans-serif;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+/* =========================================
+   RESOURCES PAGE
+========================================= */
+
+.resources-page {
+  width: min(1200px, 92%);
+  margin: 0 auto;
+  padding: 70px 0 100px;
+}
+
+/* Hero */
+
+.resources-header {
+  max-width: 800px;
+  margin: 0 auto 70px;
+  text-align: center;
+}
+
+.resources-label {
+  display: inline-block;
+  margin-bottom: 18px;
+  color: #999;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+}
+
+.resources-header h1 {
+  margin: 0;
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+}
+
+.resources-header > p {
+  max-width: 680px;
+  margin: 24px auto 0;
+  color: #999;
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+/* Sections */
+
+.resources-section,
+.opportunities-section {
+  margin-top: 70px;
+}
+
+.section-heading {
+  margin-bottom: 28px;
+}
+
+.section-heading h2 {
+  margin: 0;
+  font-size: 2rem;
+  letter-spacing: -0.02em;
+}
+
+.section-heading p {
+  margin-top: 8px;
+  color: #888;
+}
+
+/* =========================================
+   RESOURCE CARDS
+========================================= */
+
+.resource-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.resource-card {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  border: 1px solid #292929;
+  border-radius: 20px;
+  background: #181818;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.resource-card:hover {
+  transform: translateY(-5px);
+  border-color: #555;
+  background: #1c1c1c;
+}
+
+.resource-card-content {
+  padding: 28px;
+}
+
+.resource-category {
+  display: inline-block;
+  padding: 6px 10px;
+  border: 1px solid #333;
+  border-radius: 999px;
+  color: #aaa;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.resource-card h3 {
+  margin: 22px 0 12px;
+  font-size: 1.25rem;
+}
+
+.resource-card p {
+  margin: 0;
+  color: #929292;
+  line-height: 1.65;
+}
+
+.resource-link {
+  display: inline-block;
+  margin-top: 22px;
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.resource-link:hover {
+  text-decoration: underline;
+}
+
+/* =========================================
+   OPPORTUNITY SEARCH AND FILTERS
+========================================= */
+
+.opportunity-filters {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 220px auto;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.opportunity-search,
+.opportunity-filter,
+.reset-filters {
+  width: 100%;
+  min-width: 0;
+  padding: 12px 16px;
+  border: 1px solid #292929;
+  border-radius: 10px;
+  background: #151515;
+  color: #f5f5f5;
+}
+
+.opportunity-search::placeholder {
+  color: #777;
+}
+
+.opportunity-search:focus,
+.opportunity-filter:focus {
+  outline: 2px solid #666;
+  outline-offset: 2px;
+}
+
+.reset-filters {
+  width: auto;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.reset-filters:hover {
+  background: #292929;
+}
+
+.opportunity-count {
+  margin: 0 0 24px;
+  color: #888;
+  font-size: 0.9rem;
+}
+
+/* =========================================
+   OPPORTUNITY CARDS
+========================================= */
+
+.opportunity-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.opportunity-card {
+  min-width: 0;
+  padding: 28px;
+  overflow-wrap: anywhere;
+  border: 1px solid #292929;
+  border-radius: 20px;
+  background: #181818;
+  color: #f5f5f5;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.opportunity-card:hover {
+  transform: translateY(-4px);
+  border-color: #555;
+  background: #1c1c1c;
+}
+
+.opportunity-type {
+  display: inline-block;
+  padding: 6px 12px;
+  border: 1px solid #333;
+  border-radius: 999px;
+  color: #bdbdbd;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.opportunity-card h3 {
+  margin: 22px 0 12px;
+  color: #f5f5f5;
+  font-size: 1.25rem;
+}
+
+.opportunity-organization {
+  margin-bottom: 14px !important;
+  color: #c0c0c0 !important;
+  font-weight: 600;
+}
+
+.opportunity-card p {
+  color: #929292;
+  line-height: 1.7;
+}
+
+.opportunity-deadline {
+  margin-top: 18px;
+  color: #e0b878 !important;
+  font-size: 0.9rem;
+}
+
+/* Opportunity button */
+
+.apply-button {
+  display: inline-block;
+  margin-top: 24px;
+  padding: 11px 18px;
+  border: 1px solid #444;
+  border-radius: 10px;
+  background: transparent;
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.apply-button:hover {
+  transform: translateY(-2px);
+  border-color: #666;
+  background: #292929;
+}
+
+/* Empty results */
+
+.no-opportunities {
+  padding: 40px 20px;
+  border: 1px solid #292929;
+  border-radius: 16px;
+  color: #aaa;
+  text-align: center;
+}
+
+.no-opportunities h3 {
+  color: #f5f5f5;
+}
+
+/* =========================================
+   RESPONSIVE DESIGN
+========================================= */
+
+@media (max-width: 900px) {
+  .resource-list,
+  .opportunity-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .opportunity-filters {
+    grid-template-columns: minmax(0, 1fr) 200px;
+  }
+
+  .reset-filters {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 600px) {
+  .resources-page {
+    width: 90%;
+    padding-top: 45px;
+  }
+
+  .resources-header {
+    margin-bottom: 45px;
+  }
+
+  .resources-header h1 {
+    font-size: 2.7rem;
+  }
+
+  .resources-section,
+  .opportunities-section {
+    margin-top: 50px;
+  }
+
+  .resource-list,
+  .opportunity-list,
+  .opportunity-filters {
+    grid-template-columns: 1fr;
+  }
+
+  .reset-filters {
+    grid-column: auto;
+  }
+}
