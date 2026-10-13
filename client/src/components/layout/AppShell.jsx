@@ -4,15 +4,18 @@ import Sidebar from './Sidebar';
 import Home from '../../pages/Home';
 import StudentPortfolio from '../portfolio/StudentPortfolio';
 import OwnerPermissionsPanel from '../permissions/OwnerPermissionsPanel';
+import MarketplacePage from '../../pages/MarketplacePage';
 
 export function AppShell() {
-  const [activeTab, setActiveTab] = useState('portfolio');
+  const [activeTab, setActiveTab] = useState('marketplace');
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   const renderContent = () => {
     switch (activeTab) {
       case 'home':
         return <Home onNavigate={setActiveTab} />;
+      case 'marketplace':
+        return <MarketplacePage />;
       case 'portfolio':
         return <StudentPortfolio isOwner={true} />;
       case 'permissions':
@@ -29,15 +32,15 @@ export function AppShell() {
               <div className="placeholder-actions">
                 <button
                   className="btn btn-primary"
-                  onClick={() => setActiveTab('portfolio')}
+                  onClick={() => setActiveTab('marketplace')}
                 >
-                  View Student Portfolio
+                  View Marketplace
                 </button>
                 <button
                   className="btn btn-secondary"
-                  onClick={() => setActiveTab('permissions')}
+                  onClick={() => setActiveTab('portfolio')}
                 >
-                  View Owner Permissions
+                  View Student Portfolio
                 </button>
               </div>
             </div>

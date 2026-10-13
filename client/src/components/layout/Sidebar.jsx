@@ -3,8 +3,9 @@ import React from 'react';
 export function Sidebar({ activeTab, onSelectTab, isOpen, onClose }) {
   const primaryLinks = [
     { id: 'home', label: 'HOME', icon: '🏠', badge: null },
-    { id: 'portfolio', label: 'PORTFOLIO', icon: '👤', badge: 'Active' },
-    { id: 'permissions', label: 'OWNER PERMISSIONS', icon: '🛡️', badge: 'RBAC' },
+    { id: 'marketplace', label: 'MARKETPLACE', icon: '🛒', badge: 'Day 2' },
+    { id: 'portfolio', label: 'PORTFOLIO', icon: '👤', badge: 'Day 1' },
+    { id: 'permissions', label: 'PERMISSIONS', icon: '🛡️', badge: 'RBAC' },
     { id: 'network', label: 'NETWORK', icon: '🌐', badge: null },
     { id: 'resources', label: 'RESOURCES', icon: '📚', badge: null },
     { id: 'teams', label: 'TEAMS & PROJECTS', icon: '👥', badge: null }
@@ -37,9 +38,10 @@ export function Sidebar({ activeTab, onSelectTab, isOpen, onClose }) {
         </div>
 
         <div className="sidebar-group sidebar-bottom">
-          <div className="sidebar-group-title">DEVELOPER CONSOLE</div>
+          <div className="sidebar-group-title">SURYA'S WORKSPACE</div>
           <div className="sidebar-dev-box">
-            <div className="dev-box-title">Day 1 Modules</div>
+            <div className="dev-box-title">Active Modules</div>
+            <div className="dev-box-item">✓ Marketplace & Inquiries</div>
             <div className="dev-box-item">✓ Student Portfolio</div>
             <div className="dev-box-item">✓ Owner Permissions</div>
             <div className="dev-branch-tag">feature/surya-portfolio...</div>

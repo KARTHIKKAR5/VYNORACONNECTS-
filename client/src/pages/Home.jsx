@@ -5,10 +5,10 @@ export function Home({ onNavigate }) {
     <div className="home-container">
       {/* Welcome Banner */}
       <div className="welcome-section">
-        <span className="welcome-tagline">Vynora Connect • Day 1 Sprint</span>
-        <h1 className="welcome-title">Student Portfolio & Owner Permissions</h1>
+        <span className="welcome-tagline">Vynora Connect • Day 2 Architecture</span>
+        <h1 className="welcome-title">Campus Marketplace & System Design</h1>
         <p className="welcome-subtitle">
-          Welcome to Surya's Day 1 implementation module. Explore the verified Student Portfolio showcase and the Role-Based Access Control (RBAC) Owner Permissions foundation below.
+          Welcome to Surya's workspace. Explore the verified Student Portfolio, Role-Based Access Control (RBAC), and the new Day 2 Peer Service Marketplace and Inquiry contracts below.
         </p>
       </div>
 
@@ -16,20 +16,34 @@ export function Home({ onNavigate }) {
       <div className="quick-actions-section">
         <div className="section-header">
           <div className="section-title-wrap">
-            <h3 className="section-main-heading">Assigned Modules</h3>
-            <span className="section-badge">Sprint 1</span>
+            <h3 className="section-main-heading">Active Modules</h3>
+            <span className="section-badge">Sprint 2</span>
           </div>
-          <span className="section-tagline">Click to launch active module</span>
+          <span className="section-tagline">Click card to launch active module</span>
         </div>
 
         <div className="module-feature-cards-grid">
-          {/* Card 1: Student Portfolio */}
+          {/* Card 1: Marketplace (Day 2 Deliverable) */}
+          <div className="feature-launch-card" onClick={() => onNavigate('marketplace')}>
+            <div className="feature-card-badge">Day 2 • Marketplace</div>
+            <div className="feature-card-icon">🛒</div>
+            <h4 className="feature-card-title">Campus Service Marketplace</h4>
+            <p className="feature-card-desc">
+              Peer freelance catalog with ServiceListing and Inquiry contracts, search and category filtering, inquiry workflows, provider management, and a premium black-and-white interface.
+            </p>
+            <div className="feature-card-footer">
+              <span className="launch-text">Launch Marketplace</span>
+              <span className="launch-arrow">→</span>
+            </div>
+          </div>
+
+          {/* Card 2: Student Portfolio (Day 1 Deliverable) */}
           <div className="feature-launch-card" onClick={() => onNavigate('portfolio')}>
-            <div className="feature-card-badge">Module 1</div>
+            <div className="feature-card-badge">Day 1 • Portfolio</div>
             <div className="feature-card-icon">👤</div>
             <h4 className="feature-card-title">Student Portfolio</h4>
             <p className="feature-card-desc">
-              Comprehensive student profile showcasing institutional verification, external coding accounts (GitHub, LinkedIn, LeetCode), categorized skills, featured projects, and achievements with an interactive edit form.
+              Comprehensive student profile showcasing institutional verification, external coding accounts (GitHub, LinkedIn, LeetCode), categorized skills, featured projects, and achievements.
             </p>
             <div className="feature-card-footer">
               <span className="launch-text">Launch Portfolio</span>
@@ -37,13 +51,13 @@ export function Home({ onNavigate }) {
             </div>
           </div>
 
-          {/* Card 2: Owner Permissions */}
+          {/* Card 3: Owner Permissions & RBAC */}
           <div className="feature-launch-card" onClick={() => onNavigate('permissions')}>
-            <div className="feature-card-badge">Module 2</div>
+            <div className="feature-card-badge">Day 1 & 2 • Security</div>
             <div className="feature-card-icon">🛡️</div>
-            <h4 className="feature-card-title">Owner Permissions & RBAC</h4>
+            <h4 className="feature-card-title">Owner Permissions & ABAC</h4>
             <p className="feature-card-desc">
-              Complete permissions utility supporting OWNER, ADMIN, MEMBER, and VIEWER roles, permission gate enforcement, and an interactive role simulation panel with project ownership controls.
+              Comprehensive authorization rules supporting OWNER, ADMIN, MEMBER, and VIEWER roles, resource-level ownership evaluation, self-inquiry prevention, and permission gates.
             </p>
             <div className="feature-card-footer">
               <span className="launch-text">Launch Permissions Panel</span>
@@ -57,42 +71,42 @@ export function Home({ onNavigate }) {
       <div className="card sprint-highlights-card">
         <div className="card-header">
           <div>
-            <h3 className="card-title">Day 1 Architecture Highlights</h3>
-            <p className="card-subtitle">Engineered for clean modularity and collaborative Git integration</p>
+            <h3 className="card-title">Day 2 System Design Deliverables</h3>
+            <p className="card-subtitle">Formalized API contracts and documented architecture in <code>docs/</code></p>
           </div>
           <span className="badge badge-accent">Developer: Surya</span>
         </div>
 
         <div className="highlights-grid">
           <div className="highlight-item">
-            <div className="highlight-icon">🔒</div>
+            <div className="highlight-icon">📄</div>
             <div className="highlight-text-block">
-              <h5>Strict Denial-by-Default</h5>
-              <p>Unknown roles, unknown actions, and empty inputs are strictly denied by <code>canPerformAction()</code>.</p>
+              <h5>Data Schemas & Contracts</h5>
+              <p>Mongoose-compatible <code>ServiceListing</code> and <code>Inquiry</code> models specified in <code>docs/marketplace-spec.md</code>.</p>
             </div>
           </div>
 
           <div className="highlight-item">
-            <div className="highlight-icon">🛡️</div>
+            <div className="highlight-icon">🔌</div>
             <div className="highlight-text-block">
-              <h5>PermissionGate Component</h5>
-              <p>Declarative UI guarding for buttons, actions, and sections based on active user privileges.</p>
+              <h5>13 RESTful API Endpoints</h5>
+              <p>Full HTTP contracts under <code>/api/v1/marketplace</code> with standard status codes and JSON error format.</p>
             </div>
           </div>
 
           <div className="highlight-item">
-            <div className="highlight-icon">💾</div>
+            <div className="highlight-icon">🏛️</div>
             <div className="highlight-text-block">
-              <h5>Persistence & Validation</h5>
-              <p>Portfolio edits validate required fields and URL schemas, persisting locally with seamless fallback.</p>
+              <h5>Architecture Decisions</h5>
+              <p>13 Architecture Decision Records (ADRs) recorded and status-tracked in <code>docs/decisions.md</code>.</p>
             </div>
           </div>
 
           <div className="highlight-item">
             <div className="highlight-icon">🎨</div>
             <div className="highlight-text-block">
-              <h5>Responsive Dark Theme</h5>
-              <p>Engineered using Vynora standard CSS tokens, Plus Jakarta Sans typography, and fluid mobile/desktop layouts.</p>
+              <h5>Monochrome Design System</h5>
+              <p>Minimalist black-and-white UI prototype with client-side search, filters, modals, and inquiry state machines.</p>
             </div>
           </div>
         </div>

@@ -29,16 +29,22 @@ export function Navbar({ activeTab, onSelectTab, onToggleMobileSidebar }) {
           <span>🏠</span> Home
         </button>
         <button
+          className={`nav-tab-link ${activeTab === 'marketplace' ? 'active' : ''}`}
+          onClick={() => onSelectTab('marketplace')}
+        >
+          <span>🛒</span> Marketplace
+        </button>
+        <button
           className={`nav-tab-link ${activeTab === 'portfolio' ? 'active' : ''}`}
           onClick={() => onSelectTab('portfolio')}
         >
-          <span>👤</span> Student Portfolio
+          <span>👤</span> Portfolio
         </button>
         <button
           className={`nav-tab-link ${activeTab === 'permissions' ? 'active' : ''}`}
           onClick={() => onSelectTab('permissions')}
         >
-          <span>🛡️</span> Owner Permissions
+          <span>🛡️</span> Permissions
         </button>
       </div>
 
@@ -51,7 +57,7 @@ export function Navbar({ activeTab, onSelectTab, onToggleMobileSidebar }) {
           />
           <div className="nav-user-text">
             <span className="nav-user-name">Surya Prakash</span>
-            <span className="nav-user-role">Student Lead</span>
+            <span className="nav-user-role">Student Provider</span>
           </div>
         </div>
       </div>
