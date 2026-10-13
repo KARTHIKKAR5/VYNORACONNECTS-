@@ -101,12 +101,14 @@ Only an authorized owner or admin should be allowed to change recruiting status.
 | PATCH | `/projects/:id/join-requests/:requestId` | Accept or reject a request |
 | DELETE | `/projects/:id/join-requests/:requestId` | Withdraw a pending request |
 
+
 | Method | Endpoint | Purpose |
 |---|---|---|
 | `POST` | `/teams/:id/join-requests` | Submit a team join request |
 | `GET` | `/teams/:id/join-requests` | View join requests (authorized users only) |
 | `PATCH` | `/teams/:id/join-requests/:requestId` | Accept or reject a join request |
 | `DELETE` | `/teams/:id/join-requests/:requestId` | Withdraw a pending join request |
+
 
 Supported states: `Pending`, `Accepted`, `Rejected`, `Withdrawn`.
 

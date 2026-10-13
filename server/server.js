@@ -1,90 +1,134 @@
 
+require("dotenv").config();
+
 const express = require("express");
+const mongoose = require("mongoose");
 
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
 
-// Temporary storage for projects
-let projects = [];
-let nextId = 1;
+
+// 1. Project database model
+const projectSchema = new mongoose.Schema(
+    {
+        ownerId: {
+            type: String,
+            required: true
+        },
+        title: {
+            type: String,
+            required: true,
+            trim: true
+        },
+        description: {
+            type: String,
+            default: ""
+        },
+        technologies: {
+            type: [String],
+            default: []
+        },
+        visibility: {
+            type: String,
+            enum: ["Public", "CollegeOnly", "Private"],
+            default: "Public"
+        },
+        recruitingStatus: {
+            type: String,
+            enum: ["Open", "Paused", "Closed"],
+            default: "Open"
+        }
+    },
+    {
+        timestamps: true
+    }
+);
+
+const Project = mongoose.model("Project", projectSchema);
 
 
-// 1. CREATE a project
-app.post("/projects", (req, res) => {
-    const {
-        ownerId,
-        title,
-        description,
-        technologies,
-        visibility,
-        recruitingStatus
-    } = req.body;
+// 2. CREATE a project
+app.post("/projects", async (req, res) => {
+    try {
+        const project = await Project.create({
+            ownerId: req.body.ownerId,
+            title: req.body.title,
+            description: req.body.description,
+            technologies: req.body.technologies,
+            visibility: req.body.visibility,
+            recruitingStatus: req.body.recruitingStatus
+        });
 
-    // Check required fields
-    if (!ownerId || !title) {
+        res.status(201).json({
+            message: "Project created successfully",
+            project: project
+        });
+    } catch (error) {
+        if (error.name === "ValidationError") {
+            return res.status(400).json({
+                message: error.message
+            });
+        }
+
+        res.status(500).json({
+            message: "Failed to create project"
+        });
+    }
+});
+
+
+// 3. READ all projects
+app.get("/projects", async (req, res) => {
+    try {
+        const projects = await Project.find().sort({
+            createdAt: -1
+        });
+
+        res.json(projects);
+    } catch (error) {
+        res.status(500).json({
+            message: "Failed to fetch projects"
+        });
+    }
+});
+
+
+// 4. READ one project
+app.get("/projects/:id", async (req, res) => {
+    if (!mongoose.isValidObjectId(req.params.id)) {
         return res.status(400).json({
-            message: "ownerId and title are required"
+            message: "Invalid project ID"
         });
     }
 
-    const project = {
-        id: String(nextId++),
-        ownerId: ownerId,
-        title: title,
-        description: description || "",
-        technologies: technologies || [],
-        visibility: visibility || "Public",
-        recruitingStatus: recruitingStatus || "Open",
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-    };
+    try {
+        const project = await Project.findById(req.params.id);
 
-    projects.push(project);
+        if (!project) {
+            return res.status(404).json({
+                message: "Project not found"
+            });
+        }
 
-    res.status(201).json({
-        message: "Project created successfully",
-        project: project
-    });
+        res.json(project);
+    } catch (error) {
+        res.status(500).json({
+            message: "Failed to fetch project"
+        });
+    }
 });
 
 
-// 2. READ all projects
-app.get("/projects", (req, res) => {
-    res.json(projects);
-});
-
-
-// 3. READ one project using its ID
-app.get("/projects/:id", (req, res) => {
-    const project = projects.find(
-        p => p.id === req.params.id
-    );
-
-    if (!project) {
-        return res.status(404).json({
-            message: "Project not found"
+// 5. UPDATE a project
+app.patch("/projects/:id", async (req, res) => {
+    if (!mongoose.isValidObjectId(req.params.id)) {
+        return res.status(400).json({
+            message: "Invalid project ID"
         });
     }
 
-    res.json(project);
-});
-
-
-// 4. UPDATE a project
-app.patch("/projects/:id", (req, res) => {
-    const project = projects.find(
-        p => p.id === req.params.id
-    );
-
-    if (!project) {
-        return res.status(404).json({
-            message: "Project not found"
-        });
-    }
-
-    // Fields that are allowed to be updated
     const allowedFields = [
         "title",
         "description",
@@ -93,46 +137,102 @@ app.patch("/projects/:id", (req, res) => {
         "recruitingStatus"
     ];
 
+    const updates = {};
+
     for (const field of allowedFields) {
         if (req.body[field] !== undefined) {
-            project[field] = req.body[field];
+            updates[field] = req.body[field];
         }
     }
 
-    project.updatedAt = new Date().toISOString();
+    try {
+        const project = await Project.findByIdAndUpdate(
+            req.params.id,
+            updates,
+            {
+                new: true,
+                runValidators: true
+            }
+        );
 
-    res.json({
-        message: "Project updated successfully",
-        project: project
-    });
+        if (!project) {
+            return res.status(404).json({
+                message: "Project not found"
+            });
+        }
+
+        res.json({
+            message: "Project updated successfully",
+            project: project
+        });
+    } catch (error) {
+        if (error.name === "ValidationError") {
+            return res.status(400).json({
+                message: error.message
+            });
+        }
+
+        res.status(500).json({
+            message: "Failed to update project"
+        });
+    }
 });
 
 
-// 5. DELETE a project
-app.delete("/projects/:id", (req, res) => {
-    const index = projects.findIndex(
-        p => p.id === req.params.id
-    );
-
-    if (index === -1) {
-        return res.status(404).json({
-            message: "Project not found"
+// 6. DELETE a project
+app.delete("/projects/:id", async (req, res) => {
+    if (!mongoose.isValidObjectId(req.params.id)) {
+        return res.status(400).json({
+            message: "Invalid project ID"
         });
     }
 
-    projects.splice(index, 1);
+    try {
+        const project = await Project.findByIdAndDelete(
+            req.params.id
+        );
 
-    res.status(204).end();
+        if (!project) {
+            return res.status(404).json({
+                message: "Project not found"
+            });
+        }
+
+        res.status(204).end();
+    } catch (error) {
+        res.status(500).json({
+            message: "Failed to delete project"
+        });
+    }
 });
 
 
-// 6. Home route
+// 7. Home route
 app.get("/", (req, res) => {
     res.send("Vynora Projects API is running!");
 });
 
 
-// Start the server
-app.listen(PORT, () => {
-    console.log("Vynora Projects API started on port " + PORT);
-});
+// 8. Connect to MongoDB and start server
+async function startServer() {
+    try {
+        if (!process.env.MONGODB_URI) {
+            throw new Error("MONGODB_URI is missing from the .env file");
+        }
+
+        await mongoose.connect(process.env.MONGODB_URI);
+
+        console.log("MongoDB connected successfully!");
+
+        app.listen(PORT, () => {
+            console.log(
+                "Vynora Projects API started on port " + PORT
+            );
+        });
+    } catch (error) {
+        console.error("Server startup failed:", error.message);
+        process.exit(1);
+    }
+}
+
+startServer();
