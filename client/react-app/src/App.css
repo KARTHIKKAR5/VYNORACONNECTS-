@@ -57,7 +57,7 @@ select {
   letter-spacing: -0.04em;
 }
 
-.resources-header > p {
+.resources-header>p {
   max-width: 680px;
   margin: 24px auto 0;
   color: #999;
@@ -307,10 +307,64 @@ select {
 }
 
 /* =========================================
+   DAY 2 — REUSABLE CATEGORY BADGE
+========================================= */
+
+.category-badge {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding: 5px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.07);
+  color: #e5e7eb;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0.2px;
+}
+
+/* =========================================
+   DAY 2 — OPPORTUNITY DEADLINE STATUS
+========================================= */
+
+.deadline-status {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  margin: 8px 0;
+  padding: 5px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #e5e7eb;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.deadline-status-upcoming {
+  border-color: rgba(74, 222, 128, 0.3);
+}
+
+.deadline-status-deadline-today {
+  border-color: rgba(250, 204, 21, 0.4);
+}
+
+.deadline-status-expired {
+  border-color: rgba(248, 113, 113, 0.4);
+}
+
+.deadline-status-not-specified {
+  color: #a1a1aa;
+}
+
+/* =========================================
    RESPONSIVE DESIGN
 ========================================= */
 
 @media (max-width: 900px) {
+
   .resource-list,
   .opportunity-list {
     grid-template-columns: repeat(2, minmax(0, 1fr));

@@ -1,10 +1,10 @@
+import CategoryBadge from "./CategoryBadge";
+
 function ResourceCard({ title, description, category, link }) {
   return (
     <article className="resource-card">
       <div className="resource-card-content">
-        <span className="resource-category">
-          {category || "Resource"}
-        </span>
+        <CategoryBadge category={category || "Resource"} />
 
         <h3>{title}</h3>
 
