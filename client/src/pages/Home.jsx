@@ -7,14 +7,14 @@ import EventPreview from '../components/home/EventPreview';
 import ProjectPreview from '../components/home/ProjectPreview';
 import OpportunityPreview from '../components/home/OpportunityPreview';
 
-function Home() {
+export function Home({ onNavigate }) {
   return (
     <div className="home-container">
       {/* 1. Welcome Banner */}
       <Welcome />
 
       {/* 2. Quick Actions */}
-      <QuickActions />
+      <QuickActions onNavigate={onNavigate} />
 
       {/* 3. Recent Activity */}
       <Activity />

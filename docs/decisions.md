@@ -181,10 +181,6 @@ Endpoints returning collections support both **Offset Pagination** (for tables/c
 }
 ```
 
-* Query parameters:
-  * `?page=1&limit=10`
-  * Or `?cursor=670c1a2e4f1a230012a9b155&limit=10`
-
 ---
 
 ## 5. Unresolved Choices & Architecture Decisions Log
@@ -199,7 +195,27 @@ Endpoints returning collections support both **Offset Pagination** (for tables/c
 
 ---
 
-## 6. Next Steps & Individual Assignments
+## 6. Architecture Decision Records (ADRs) Summary Table
+
+| ID | Topic | Proposed Decision | Status | Owner | Date |
+|---|---|---|---|---|---|
+| **ADR-001** | Frontend Framework | React 18 with Vite & Vanilla CSS Tokens | **AGREED** | Core Platform / Team | 2026-10-10 |
+| **ADR-002** | Backend Framework | Node.js + Express with Modular Routers | **AGREED** | Core Platform / Team | 2026-10-10 |
+| **ADR-003** | Primary Database | MongoDB Atlas with Mongoose ODM | **AGREED** | Core Platform / Team | 2026-10-10 |
+| **ADR-004** | API Versioning & URL Prefix | Use `/api/v1` prefix for all REST endpoints | **PROPOSED** | Surya (Marketplace / Permissions) | 2026-10-13 |
+| **ADR-005** | Persistent Entity Identifier (ID) | 24-character hexadecimal MongoDB `ObjectId` string | **PROPOSED** | Surya (Marketplace / Permissions) | 2026-10-13 |
+| **ADR-006** | Timestamp Standard | ISO 8601 UTC (`YYYY-MM-DDTHH:mm:ss.sssZ`) via Mongoose timestamps | **PROPOSED** | Surya (Marketplace / Permissions) | 2026-10-13 |
+| **ADR-007** | Client Authentication Context | Bearer JWT header verified via Express middleware populating `req.user` | **PROPOSED** | Surya (Marketplace / Permissions) | 2026-10-13 |
+| **ADR-008** | Standard REST Error Response Format | Unified envelope `{ success: false, error: { code, message, details }, requestId }` | **PROPOSED** | Surya (Marketplace / Permissions) | 2026-10-13 |
+| **ADR-009** | Standard REST Success Response Format | Unified envelope `{ success: true, data: {}, meta: {} }` | **PROPOSED** | Surya (Marketplace / Permissions) | 2026-10-13 |
+| **ADR-010** | Pagination Standard | Page & Limit query parameters with total record metadata | **PROPOSED** | Surya (Marketplace / Permissions) | 2026-10-13 |
+| **ADR-011** | Shared Entity References | Foreign key references (`ownerId`, `requesterId`) without embedding full User documents | **PROPOSED** | Surya (Marketplace / Permissions) | 2026-10-13 |
+| **ADR-012** | Marketplace Ownership & Authorization Model | Separation of resource-level ownership from platform roles; denial-by-default | **PROPOSED** | Surya (Marketplace / Permissions) | 2026-10-13 |
+| **ADR-013** | Real-Time Messaging Boundary | Inquiries trigger chat handoff; ongoing conversation owned by Messages module | **PROPOSED** | Surya (Marketplace / Permissions) | 2026-10-13 |
+
+---
+
+## 7. Next Steps & Individual Assignments
 
 * **Karthik:** Complete the detailed **Dashboard API Needs** specification ([`docs/dashboard-api-needs.md`](file:///c:/Users/KARTHIK/Desktop/VYNORAA-CONNECTS/VYNORACAMPUS-/docs/dashboard-api-needs.md)), establishing the activity taxonomy, data contracts, and required fields from Events, Projects, Opportunities, and Connections.
 * **Ram:** Complete Auth & User/Profile API specifications.

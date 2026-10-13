@@ -1,19 +1,72 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
 import Home from '../../pages/Home';
+import StudentPortfolio from '../portfolio/StudentPortfolio';
+import OwnerPermissionsPanel from '../permissions/OwnerPermissionsPanel';
+import MarketplacePage from '../../pages/MarketplacePage';
 
-function AppShell() {
+export function AppShell() {
+  const [activeTab, setActiveTab] = useState('home');
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+
+  const renderContent = () => {
+    switch (activeTab) {
+      case 'home':
+        return <Home onNavigate={setActiveTab} />;
+      case 'marketplace':
+        return <MarketplacePage />;
+      case 'portfolio':
+        return <StudentPortfolio isOwner={true} />;
+      case 'permissions':
+        return <OwnerPermissionsPanel />;
+      default:
+        return (
+          <div className="teammate-module-placeholder">
+            <div className="placeholder-card card">
+              <span className="placeholder-icon">🚧</span>
+              <h3>Module Under Construction</h3>
+              <p>
+                The <strong>{activeTab.toUpperCase()}</strong> module is currently assigned to a teammate and being developed in its dedicated feature branch.
+              </p>
+              <div className="placeholder-actions">
+                <button
+                  className="btn btn-primary"
+                  onClick={() => setActiveTab('home')}
+                >
+                  Back to Dashboard
+                </button>
+                <button
+                  className="btn btn-secondary"
+                  onClick={() => setActiveTab('marketplace')}
+                >
+                  View Marketplace
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+    }
+  };
+
   return (
     <div className="app-shell">
-      {/* Top Navigation */}
-      <Navbar />
+      <Navbar
+        activeTab={activeTab}
+        onSelectTab={setActiveTab}
+        onToggleMobileSidebar={() => setMobileSidebarOpen(prev => !prev)}
+      />
 
-      {/* Main Layout: Sidebar on left, Content (Home) on right */}
       <div className="app-layout">
-        <Sidebar />
+        <Sidebar
+          activeTab={activeTab}
+          onSelectTab={setActiveTab}
+          isOpen={mobileSidebarOpen}
+          onClose={() => setMobileSidebarOpen(false)}
+        />
+
         <main className="app-main-content">
-          <Home />
+          {renderContent()}
         </main>
       </div>
     </div>
