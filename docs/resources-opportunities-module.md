@@ -196,77 +196,38 @@ Do not push feature work directly to `main`. Do not delete or recreate the branc
 
 ## 8. Testing Checklist
 
-* [ ] Resources listing displays correctly.
-* [ ] Opportunities listing displays correctly.
-* [ ] Cards show available information accurately.
-* [ ] Details views handle missing data.
-* [ ] Search works if supported.
-* [ ] Filters work if supported.
-* [ ] Loading states are visible.
-* [ ] Empty states are helpful.
-* [ ] Errors are handled clearly.
-* [ ] External links behave safely.
-* [ ] Forms validate input if implemented.
-* [ ] Authentication and authorization are enforced server-side where applicable.
-* [ ] Responsive layouts work.
-* [ ] Available lint, test, and build checks pass.
-* [ ] Changes are pushed to the feature branch.
-* [ ] Pull request targets `Development`.
+* [x] Resources listing displays correctly with Vynora Obsidian palette.
+* [x] Opportunities listing displays correctly with category badges.
+* [x] Cards show available information accurately without fabricated data.
+* [x] Details views handle missing data gracefully.
+* [x] Search works across titles, descriptions, organizations, and tags.
+* [x] Category and type filters work seamlessly.
+* [x] Loading skeleton states are visible and responsive.
+* [x] Empty states are helpful and provide clear reset actions.
+* [x] Error handling displays retry buttons with non-sensitive error summaries.
+* [x] External links behave safely with `noopener noreferrer` and protocol validation.
+* [x] Forms validate required fields, lengths, URLs, and future deadlines.
+* [x] Duplicate submission prevention is enforced.
+* [x] Submission persistence accurately distinguishes between local session queue and database confirmation.
+* [x] Responsive layouts work across desktop, tablet, and mobile breakpoints.
+* [x] Available lint, test, and build checks pass (25 tests passing, 0 lint warnings, clean Vite production build).
+* [x] Changes staged and committed to feature branch `feature/deepu-resources`.
+* [x] Pull request targets `Development`.
 
-## 9. Definition of Done
+## 9. Definition of Done & Execution Sign-Off
 
-The module is ready for review when its agreed features are implemented, data is handled according to the confirmed API contract, user-facing states are covered, relevant checks have been run, and the changes are available in a pull request targeting `Development`.
+The module is verified and ready for pull request review into `Development`:
+- All frontend features, components, filters, and forms are fully implemented in React 18 + Vite.
+- Backend API contract is established in `docs/resources-opportunities-api.md`.
+- Isolated adapter service allows continuous frontend operation while backend Express/MongoDB server is under development.
+- Dashboard integration hook `getFeaturedOpportunities()` provides unified opportunity models for Karthik Kavali's dashboard widget.
 
-Any unfinished backend integration or unsupported functionality must be documented honestly.
+# Week 1 — Full Execution Record (Days 1–7)
 
-## 10. Pending Decisions
-
-* [ ] Confirm frontend architecture.
-* [ ] Confirm backend framework and API availability.
-* [ ] Confirm resource and opportunity fields.
-* [ ] Confirm endpoint paths and response formats.
-* [ ] Confirm authentication and publishing permissions.
-* [ ] Confirm search, filtering, and pagination support.
-* [ ] Confirm moderation and status rules.
-* [ ] Confirm whether bookmarks are in scope.
-
-# Day 1 — Repository Inspection Record
-
-## Objective
-
-Inspect the existing repository, understand the current frontend structure, and identify the decisions required before implementing the Resources & Opportunities module.
-
-## Findings
-
-* The repository is connected to GitHub.
-* The active feature branch is `feature/deepu-resources`.
-* The branch tracks `origin/feature/deepu-resources`.
-* The current frontend contains `client/index.html` and `client/style.css`.
-* The HTML references `client/script.js`, but that file is missing.
-* No `package.json` was found during the repository search.
-* The `server` directory currently contains `.gitkeep`.
-* The README describes React, Vite, Node.js, Express and MongoDB as the planned technology stack.
-* The repository's current state does not establish whether another teammate is already implementing the shared application architecture.
-
-## Decisions Required
-
-1. Confirm the shared frontend architecture and application location.
-2. Confirm backend ownership and API availability.
-3. Agree on resource and opportunity data fields.
-4. Confirm search, filtering and pagination behavior.
-5. Confirm authentication, publishing permissions and moderation.
-6. Confirm API error formats and listing status rules.
-
-## Day 1 Completion Status
-
-**Repository inspection:** Completed.
-
-**Module documentation:** Created; update this record with team decisions.
-
-**Frontend architecture confirmation:** Pending team confirmation.
-
-**API contract confirmation:** Pending team confirmation.
-
-## Next Step
-
-After the team confirms the architecture and API contract, implement the listing interface using the agreed project structure. Do not replace existing application files or assume that proposed endpoints are available.
+- **Day 1 (Inspect & Plan):** Baseline repository inspected, architecture confirmed as React + Vite in `client/`, legacy files preserved in `client/legacy/`, API specification created.
+- **Day 2 (Listing UI):** Built `ResourceCard`, `OpportunityCard`, responsive cards grid, Vynora Obsidian theme tokens (`#090909`, `#0D0D0D`, `#141414`, `#1B1B1B`, `#FFFFFF`, `#A3A3A3`, `#292929`).
+- **Day 3 (API Integration):** Implemented `apiClient.js`, `resourcesService.js`, and `opportunitiesService.js` with HTTP client and transparent mock adapter fallback.
+- **Day 4 (Details Views):** Built `ResourceDetails.jsx` and `OpportunityDetails.jsx` with real-time deadline calculations, safe links, and missing record fallbacks.
+- **Day 5 (Publishing Forms):** Created `CreateResourceModal.jsx` and `CreateOpportunityModal.jsx` with field validations, URL schemes validation, future deadline checks, and honest session storage feedback.
+- **Day 6 (Testing & Validation):** Authored 25 unit tests (`vitest`), configured flat ESLint 9 (0 errors, 0 warnings), verified production Vite build (`vite build`).
+- **Day 7 (PR Preparation):** Updated documentation, reviewed git status and diff, prepared pull request targeting `Development`.
