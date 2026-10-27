@@ -201,10 +201,57 @@ VYNORA CONNECT
 │
 ├── 4. Communication
 │
-├── 5. Resources & Opportunities
+├── 5. Resources & Opportunities (Module 5 — Deepu)
+│   ├── Educational Resources (Notes, Roadmaps, Tutorials, Docs)
+│   ├── Student Opportunities (Internships, Jobs, Hackathons, Contests, Scholarships)
+│   ├── Unified Search, Taxonomy Filters & Real-Time Deadline Calculations
+│   └── Dedicated API Adapter Layer (supports live backend & offline dev mock)
 │
 ├── 6. Campus & Events
 │
 ├── 7. Freelancing & Student Services Marketplace
 │
 └── 8. Admin, Moderation & Trust & Safety
+```
+
+---
+
+## 🚀 Getting Started (Client Frontend)
+
+### Prerequisites
+- Node.js: `v18+` (Tested on `v22.19.0`)
+- npm: `v9+` (Tested on `10.9.3`)
+
+### Installation & Running Locally
+
+```bash
+# From the repository root
+npm run dev
+
+# Or directly in the client directory
+cd client
+npm install
+npm run dev
+```
+The development server runs at `http://localhost:3000/`.
+
+### Environment Variables
+- `VITE_API_BASE_URL`: (Optional) Base URL for the Express backend (default: `/api/v1`).
+
+### Quality Checks & Production Build
+
+```bash
+# Run unit and service adapter test suite (25 tests)
+npm test
+
+# Run ESLint 9 code quality check
+npm run lint
+
+# Compile production Vite build
+npm run build
+```
+
+### Module Architecture & API Specification
+Complete API schemas, endpoint contracts, trust boundaries, and dashboard integration guidelines are documented in:
+- [`docs/resources-opportunities-api.md`](docs/resources-opportunities-api.md)
+- [`docs/resources-opportunities-module.md`](docs/resources-opportunities-module.md)
