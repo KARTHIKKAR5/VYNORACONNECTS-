@@ -1,4 +1,9 @@
 /**
+ * Vynora Connect — Shared API Client
+ * Centralized HTTP request handler with error wrapping and timeout safety.
+ */
+
+const API_BASE_URL = import.meta.env?.VITE_API_BASE_URL || '/api/v1';
  * Vynora Connect — Central API Client
  * Standardized HTTP request handler with error wrapping, timeouts, and authorization headers.
  */
@@ -20,6 +25,8 @@ export class ApiError extends Error {
 
 export async function request(endpoint, options = {}) {
   const url = `${API_BASE_URL}${endpoint}`;
+  const headers = {
+    'Content-Type': 'application/json',
   const token = typeof localStorage !== 'undefined' ? localStorage.getItem('vynora_token') : null;
   const currentUserId = typeof localStorage !== 'undefined' ? localStorage.getItem('vynora_user_id') : null;
 
@@ -36,6 +43,12 @@ export async function request(endpoint, options = {}) {
   };
 
   try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 6000);
+    config.signal = controller.signal;
+
+    const response = await fetch(url, config);
+    clearTimeout(timeoutId);
     const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
     let timeoutId = null;
     if (controller) {
@@ -61,6 +74,10 @@ export async function request(endpoint, options = {}) {
       throw error;
     }
     if (error.name === 'AbortError') {
+      throw new ApiError('Request timed out. Please check your connection.', 408, 'TIMEOUT');
+    }
+    throw new ApiError(
+      error.message || 'Unable to connect to Vynora backend server.',
       throw new ApiError('Request timed out. Please check your network connection.', 408, 'TIMEOUT');
     }
     throw new ApiError(
@@ -83,6 +100,10 @@ export const apiClient = {
     const url = queryString ? `${endpoint}?${queryString}` : endpoint;
     return request(url, { method: 'GET' });
   },
+  post: (endpoint, body) => request(endpoint, { method: 'POST', body: JSON.stringify(body) }),
+  patch: (endpoint, body) => request(endpoint, { method: 'PATCH', body: JSON.stringify(body) }),
+  delete: (endpoint) => request(endpoint, { method: 'DELETE' }),
+};
   post: (endpoint, body) =>
     request(endpoint, {
       method: 'POST',

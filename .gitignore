@@ -1,5 +1,11 @@
 node_modules/
 .env
+.env.local
+dist/
+dist-ssr/
+*.local
+.vite/
+coverage/
 dist/
 client/dist/
 *.log
