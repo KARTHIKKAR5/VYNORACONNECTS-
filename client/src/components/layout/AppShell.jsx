@@ -55,14 +55,14 @@ export function AppShell({
   ];
 
   const navigationItems = [
-    { id: 'dashboard', label: 'Home Dashboard', icon: Compass, tag: 'Karthik' },
-    { id: 'network', label: 'Network', icon: Users, tag: 'Ram' },
-    { id: 'opportunities', label: 'Opportunities', icon: Briefcase, tag: 'Deepu' },
-    { id: 'teams', label: 'Projects & Teams', icon: Layers, tag: 'Varsh' },
-    { id: 'events', label: 'Clubs & Events', icon: GraduationCap, tag: 'Sindhu' },
-    { id: 'messages', label: 'Messages', icon: MessageSquare, tag: 'Siri', unreadCount: 5 },
-    { id: 'mentorship', label: 'Mentorship', icon: Sparkles, tag: 'Surya' },
-    { id: 'resources', label: 'Resources', icon: BookOpen, tag: 'Deepu' },
+    { id: 'dashboard', label: 'Home Dashboard', icon: Compass },
+    { id: 'network', label: 'Campus Network', icon: Users },
+    { id: 'opportunities', label: 'Opportunities', icon: Briefcase },
+    { id: 'teams', label: 'Projects & Teams', icon: Layers },
+    { id: 'events', label: 'Clubs & Events', icon: GraduationCap },
+    { id: 'messages', label: 'Messages', icon: MessageSquare, unreadCount: 5 },
+    { id: 'mentorship', label: 'Mentorship', icon: Sparkles },
+    { id: 'resources', label: 'Study Resources', icon: BookOpen },
     { id: 'profile', label: 'My Profile', icon: User },
   ];
 
@@ -106,7 +106,6 @@ export function AppShell({
             <div className="logo-title">Vynora Connect</div>
             <div className="logo-tagline">CONNECT STUDENTS BEYOND CAMPUS</div>
           </div>
-          <span className="logo-badge">Live</span>
         </div>
 
         <nav className="sidebar-nav">
@@ -126,18 +125,6 @@ export function AppShell({
                 <span className="nav-label">{item.label}</span>
                 {item.unreadCount && (
                   <span className="nav-badge-count">{item.unreadCount}</span>
-                )}
-                {item.tag && !item.unreadCount && (
-                  <span
-                    className="nav-counter"
-                    style={{
-                      backgroundColor: isActive ? 'rgba(99, 102, 241, 0.15)' : 'var(--bg-card)',
-                      color: isActive ? 'var(--accent-primary)' : 'var(--text-muted)',
-                      border: isActive ? '1px solid var(--accent-primary)' : undefined,
-                    }}
-                  >
-                    {item.tag}
-                  </span>
                 )}
               </button>
             );
@@ -186,8 +173,8 @@ export function AppShell({
           >
             <div className="avatar">K</div>
             <div className="user-info">
-              <span className="user-name">Karthik (Owner)</span>
-              <span className="user-role">Home Dashboard & Pulse</span>
+              <span className="user-name">Karthik</span>
+              <span className="user-role">SR University • Computer Science</span>
             </div>
           </div>
         </div>

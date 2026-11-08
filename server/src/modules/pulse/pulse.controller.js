@@ -29,3 +29,4 @@ export async function getPulse(req, res, next) {
     next(error);
   }
 }
+

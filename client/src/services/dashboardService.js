@@ -293,3 +293,4 @@ export async function updatePreferences(preferences) {
   }
   return preferences;
 }
+

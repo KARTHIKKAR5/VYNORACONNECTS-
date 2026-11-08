@@ -110,3 +110,4 @@ export function DashboardStats({ stats, onStatClick }) {
     </section>
   );
 }
+

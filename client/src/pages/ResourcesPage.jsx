@@ -88,7 +88,7 @@ export function ResourcesPage({ onStatusUpdate }) {
       <div className="alert-info">
         <Info size={16} style={{ flexShrink: 0 }} />
         <span>
-          Week 1 resources module is live. Search by topic or filter by category. All external documentation and notes links are validated.
+          Curated study resources, handbooks, and roadmaps across partner campuses. All materials are verified.
         </span>
       </div>
 

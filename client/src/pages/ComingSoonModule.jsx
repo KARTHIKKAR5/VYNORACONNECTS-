@@ -10,7 +10,6 @@ import {
   HelpCircle,
   ArrowLeft,
   Sparkles,
-  Calendar,
 } from 'lucide-react';
 
 const MODULE_METADATA = {
@@ -147,11 +146,10 @@ export function ComingSoonModule({ moduleId, onBackToDashboard }) {
             <div className="module-badge-row">
               <span className="badge-pill">
                 <Sparkles size={12} />
-                Module Owner: {meta.owner}
+                Campus Network Rollout
               </span>
               <span className="badge-pill badge-neutral">
-                <Calendar size={12} />
-                Sprint Integration
+                In Active Preview
               </span>
             </div>
 
@@ -161,7 +159,7 @@ export function ComingSoonModule({ moduleId, onBackToDashboard }) {
         </div>
 
         <div className="module-roadmap-box">
-          <h3 className="roadmap-title">Planned Features in Next Release</h3>
+          <h3 className="roadmap-title">Module Capabilities &amp; Roadmap</h3>
           <div className="features-checklist">
             {meta.features.map((feat, idx) => (
               <div key={idx} className="feature-check-item">
@@ -187,3 +185,4 @@ export function ComingSoonModule({ moduleId, onBackToDashboard }) {
     </div>
   );
 }
+

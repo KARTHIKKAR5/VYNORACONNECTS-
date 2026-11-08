@@ -22,3 +22,4 @@ export function validatePreferencesUpdate(body) {
     errors,
   };
 }
+

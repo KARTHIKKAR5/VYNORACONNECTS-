@@ -43,3 +43,4 @@ export function PulseFilters({ activeFilter, onFilterChange }) {
     </div>
   );
 }
+

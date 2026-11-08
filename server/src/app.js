@@ -65,3 +65,4 @@ app.get('/api/v1/resources', async (req, res, next) => {
 // Error handling
 app.use(notFoundHandler);
 app.use(errorHandler);
+

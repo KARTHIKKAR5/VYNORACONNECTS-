@@ -12,3 +12,4 @@ router.get('/preferences', dashboardController.getPreferences);
 router.patch('/preferences', dashboardController.updatePreferences);
 
 export default router;
+

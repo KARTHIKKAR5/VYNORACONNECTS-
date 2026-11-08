@@ -10,3 +10,4 @@ router.use(authenticateUser);
 router.get('/', pulseController.getPulse);
 
 export default router;
+

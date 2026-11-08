@@ -54,3 +54,4 @@ export function authenticateUser(req, res, next) {
   req.user = { ...DEMO_USER };
   next();
 }
+

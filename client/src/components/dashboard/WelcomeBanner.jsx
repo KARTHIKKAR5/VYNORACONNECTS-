@@ -52,3 +52,4 @@ export function WelcomeBanner({ user, onExploreClick }) {
     </div>
   );
 }
+

@@ -101,3 +101,4 @@ export function StudentRecommendationsSection({ students = [], onViewNetwork }) 
     </div>
   );
 }
+

@@ -32,9 +32,9 @@ const RAW_PULSE_ACTIVITIES = [
     type: 'hackathon_announced',
     category: 'opportunity',
     actor: {
-      id: 'std-deepu',
-      name: 'Deepika A. (Lead Organizer)',
-      college: 'Vynora Campus Innovation Lab',
+      id: 'org-innovation-lab',
+      name: 'Deepika Avunoori',
+      college: 'Campus Innovation Lab',
       avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80',
     },
     activityDescription: 'announced registrations for flagship inter-college hackathon',
@@ -238,3 +238,4 @@ export async function getPulseFeed(user, { filter = 'all', page = 1, limit = 10 
     },
   };
 }
+

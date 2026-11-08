@@ -49,3 +49,4 @@ export function mapActivityToSafeDTO(activity) {
     },
   };
 }
+

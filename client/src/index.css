@@ -14,8 +14,8 @@
 
   /* Text & Contrast */
   --text-primary: #FFFFFF;
-  --text-secondary: #A3A3A3;
-  --text-muted: #737373;
+  --text-secondary: #CBD5E1;
+  --text-muted: #94A3B8;
   --text-inverse: #090909;
 
   /* Borders & Dividers */
@@ -1566,12 +1566,13 @@ input, textarea, select {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 4px 12px;
+  padding: 5px 14px;
   border-radius: var(--radius-md);
-  background-color: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--border-subtle);
-  color: var(--text-secondary);
-  font-size: 0.78rem;
+  background-color: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
+  font-size: 0.825rem;
+  font-weight: 500;
 }
 
 .meta-pill.verified-pill {
@@ -1931,20 +1932,21 @@ input, textarea, select {
 
 .actor-name {
   font-weight: 700;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   color: var(--text-primary);
+  letter-spacing: -0.01em;
 }
 
 .actor-action-desc {
-  font-size: 0.825rem;
-  color: var(--text-muted);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
 }
 
 .actor-subtext {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 0.72rem;
+  font-size: 0.78rem;
   color: var(--text-muted);
   margin-top: 2px;
 }
@@ -2172,7 +2174,7 @@ input, textarea, select {
 }
 
 .event-name {
-  font-size: 0.88rem;
+  font-size: 0.95rem;
   font-weight: 700;
   color: var(--text-primary);
   white-space: nowrap;
@@ -2181,11 +2183,12 @@ input, textarea, select {
 }
 
 .event-tag {
-  font-size: 0.65rem;
-  padding: 2px 6px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 2px 7px;
   border-radius: var(--radius-sm);
   background-color: var(--bg-card);
-  color: var(--text-muted);
+  color: var(--accent-primary);
   border: 1px solid var(--border-subtle);
   flex-shrink: 0;
 }
@@ -2193,9 +2196,9 @@ input, textarea, select {
 .event-meta-line {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 0.72rem;
-  color: var(--text-muted);
+  gap: 8px;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
 }
 
 .event-meta-item {
@@ -2226,14 +2229,15 @@ input, textarea, select {
 }
 
 .project-title {
-  font-size: 0.95rem;
+  font-size: 1.02rem;
   font-weight: 700;
   color: var(--text-primary);
+  letter-spacing: -0.01em;
 }
 
 .project-creator-line {
-  font-size: 0.72rem;
-  color: var(--text-muted);
+  font-size: 0.8rem;
+  color: var(--text-secondary);
   margin-top: 2px;
 }
 
@@ -2359,13 +2363,15 @@ input, textarea, select {
 }
 
 .opp-title {
-  font-size: 0.95rem;
+  font-size: 1.02rem;
   font-weight: 700;
   color: var(--text-primary);
+  letter-spacing: -0.01em;
 }
 
 .opp-org-line {
-  font-size: 0.78rem;
+  font-size: 0.825rem;
+  font-weight: 500;
   color: var(--text-secondary);
   margin-top: 2px;
   margin-bottom: 10px;
@@ -2517,21 +2523,23 @@ input, textarea, select {
 }
 
 .student-name {
-  font-size: 0.88rem;
+  font-size: 0.95rem;
   font-weight: 700;
   color: var(--text-primary);
+  letter-spacing: -0.01em;
 }
 
 .mutual-count {
-  font-size: 0.7rem;
-  color: var(--text-muted);
+  font-size: 0.72rem;
+  color: var(--accent-primary);
+  font-weight: 500;
 }
 
 .student-college-dept {
-  font-size: 0.72rem;
-  color: var(--text-muted);
+  font-size: 0.78rem;
+  color: var(--text-secondary);
   display: block;
-  margin-top: 1px;
+  margin-top: 2px;
 }
 
 .skills-row {
@@ -2612,23 +2620,25 @@ input, textarea, select {
 }
 
 .mentor-name {
-  font-size: 0.88rem;
+  font-size: 0.95rem;
   font-weight: 700;
   color: var(--text-primary);
+  letter-spacing: -0.01em;
 }
 
 .mentor-rating {
   display: inline-flex;
   align-items: center;
   gap: 3px;
-  font-size: 0.72rem;
+  font-size: 0.78rem;
   color: #F59E0B;
   font-weight: 700;
 }
 
 .mentor-org {
-  font-size: 0.72rem;
-  color: var(--text-muted);
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  margin-top: 1px;
 }
 
 .mentor-expertise-tags {

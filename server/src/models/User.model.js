@@ -60,3 +60,4 @@ UserSchema.index({ email: 1 });
 UserSchema.index({ college: 1 });
 
 export const User = mongoose.models.User || mongoose.model('User', UserSchema);
+

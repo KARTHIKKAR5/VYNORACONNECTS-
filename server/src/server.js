@@ -31,3 +31,4 @@ bootstrap().catch((err) => {
   console.error('[Vynora Backend] Bootstrap failure:', err);
   process.exit(1);
 });
+

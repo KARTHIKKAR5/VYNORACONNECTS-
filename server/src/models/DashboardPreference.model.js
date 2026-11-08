@@ -46,3 +46,4 @@ const DashboardPreferenceSchema = new mongoose.Schema(
 export const DashboardPreference =
   mongoose.models.DashboardPreference ||
   mongoose.model('DashboardPreference', DashboardPreferenceSchema);
+

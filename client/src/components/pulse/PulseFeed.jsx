@@ -117,3 +117,4 @@ export function PulseFeed({ onActivityAction }) {
     </section>
   );
 }
+

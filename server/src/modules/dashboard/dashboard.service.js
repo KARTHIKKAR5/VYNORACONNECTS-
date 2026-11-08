@@ -130,3 +130,4 @@ export async function updateUserPreferences(userId, updateData) {
   inMemoryPreferences.set(userId, updated);
   return updated;
 }
+
