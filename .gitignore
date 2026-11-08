@@ -1,2 +1,5 @@
 node_modules/ 
 .env 
+
+# Campus Events frontend build output
+client/campus-events/dist/
