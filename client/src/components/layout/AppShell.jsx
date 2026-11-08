@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import {
   Compass,
   Users,
@@ -16,58 +17,54 @@ import {
   Search,
   Menu,
   X,
-  Server,
   CheckCircle2,
   ChevronDown,
+  Zap,
 } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext.jsx';
 
-export function AppShell({
-  activeTab,
-  setActiveTab,
-  isLiveBackend,
-  children,
-}) {
+export function AppShell() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { user, logout } = useAuth();
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const [notifDropdownOpen, setNotifDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [toastMessage, setToastMessage] = useState(null);
 
+  const displayName = user ? (user.displayName || user.name || user.firstName || 'Student') : 'Student';
+  const firstName = user ? (user.firstName || displayName.split(' ')[0]) : 'Student';
+  const initials = displayName
+    .split(' ')
+    .map(n => n[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase();
+  const college = user ? (user.college || 'Vynora') : 'Vynora';
+  const branch = user ? (user.branch || user.department || 'Student') : 'Student';
+
   const notifications = [
-    {
-      id: 'n-1',
-      title: 'Priya Sharma accepted your request',
-      time: '25m ago',
-      unread: true,
-    },
-    {
-      id: 'n-2',
-      title: 'HackVynora 2026 announced registration',
-      time: '1h ago',
-      unread: true,
-    },
-    {
-      id: 'n-3',
-      title: 'Varshitha invited you to Autonomous Drone project',
-      time: '3h ago',
-      unread: false,
-    },
+    { id: 'n-1', title: 'Connection request accepted', time: '25m ago', unread: true },
+    { id: 'n-2', title: 'HackVynora 2026 registration open', time: '1h ago', unread: true },
+    { id: 'n-3', title: 'New project invite received', time: '3h ago', unread: false },
   ];
 
   const navigationItems = [
-    { id: 'dashboard', label: 'Home Dashboard', icon: Compass },
-    { id: 'network', label: 'Campus Network', icon: Users },
-    { id: 'opportunities', label: 'Opportunities', icon: Briefcase },
-    { id: 'teams', label: 'Projects & Teams', icon: Layers },
-    { id: 'events', label: 'Clubs & Events', icon: GraduationCap },
-    { id: 'messages', label: 'Messages', icon: MessageSquare, unreadCount: 5 },
-    { id: 'mentorship', label: 'Mentorship', icon: Sparkles },
-    { id: 'resources', label: 'Study Resources', icon: BookOpen },
-    { id: 'profile', label: 'My Profile', icon: User },
+    { path: '/app', label: 'Home Dashboard', icon: Compass, exact: true },
+    { path: '/app/network', label: 'Campus Network', icon: Users },
+    { path: '/app/opportunities', label: 'Opportunities', icon: Briefcase },
+    { path: '/app/projects', label: 'Projects & Teams', icon: Layers },
+    { path: '/app/clubs', label: 'Clubs & Events', icon: GraduationCap },
+    { path: '/app/messages', label: 'Messages', icon: MessageSquare, badge: 5 },
+    { path: '/app/mentorship', label: 'Mentorship', icon: Sparkles },
+    { path: '/app/resources', label: 'Study Resources', icon: BookOpen },
+    { path: '/app/profile', label: 'My Profile', icon: User },
   ];
 
-  const handleNavClick = (tabId) => {
-    setActiveTab(tabId);
+  const handleNavClick = (path) => {
+    navigate(path);
     setMobileMenuOpen(false);
     setProfileDropdownOpen(false);
     setNotifDropdownOpen(false);
@@ -78,12 +75,23 @@ export function AppShell({
     setTimeout(() => setToastMessage(null), 3000);
   };
 
+  const handleLogout = () => {
+    setProfileDropdownOpen(false);
+    logout();
+    navigate('/', { replace: true });
+  };
+
   const getBreadcrumbTitle = () => {
-    const item = navigationItems.find((n) => n.id === activeTab);
-    if (item) return item.label;
-    if (activeTab === 'settings') return 'Settings';
-    if (activeTab === 'support') return 'Help & Support';
-    return 'Dashboard';
+    const matched = navigationItems.find(item =>
+      item.exact ? location.pathname === item.path : location.pathname.startsWith(item.path) && item.path !== '/app'
+    );
+    if (location.pathname === '/app') return 'Home Dashboard';
+    return matched ? matched.label : 'Dashboard';
+  };
+
+  const isNavActive = (item) => {
+    if (item.exact) return location.pathname === item.path;
+    return location.pathname.startsWith(item.path);
   };
 
   return (
@@ -99,10 +107,10 @@ export function AppShell({
       {/* Sidebar */}
       <aside className={`app-sidebar ${mobileMenuOpen ? 'open' : ''}`}>
         <div className="sidebar-header">
-          <div className="logo-icon" onClick={() => handleNavClick('dashboard')} style={{ cursor: 'pointer' }}>
-            V
+          <div className="logo-icon" onClick={() => handleNavClick('/app')} style={{ cursor: 'pointer' }}>
+            <Zap size={16} />
           </div>
-          <div onClick={() => handleNavClick('dashboard')} style={{ cursor: 'pointer' }}>
+          <div onClick={() => handleNavClick('/app')} style={{ cursor: 'pointer' }}>
             <div className="logo-title">Vynora Connect</div>
             <div className="logo-tagline">CONNECT STUDENTS BEYOND CAMPUS</div>
           </div>
@@ -112,19 +120,19 @@ export function AppShell({
           <div className="nav-section-title">Navigation</div>
           {navigationItems.map((item) => {
             const Icon = item.icon;
-            const isActive = activeTab === item.id;
+            const active = isNavActive(item);
             return (
               <button
-                key={item.id}
+                key={item.path}
                 type="button"
-                className={`nav-item ${isActive ? 'active' : ''}`}
-                onClick={() => handleNavClick(item.id)}
-                id={`sidebar-nav-${item.id}`}
+                className={`nav-item ${active ? 'active' : ''}`}
+                onClick={() => handleNavClick(item.path)}
+                id={`sidebar-nav-${item.path.replace('/app/', '').replace('/app', 'dashboard')}`}
               >
                 <Icon size={18} />
                 <span className="nav-label">{item.label}</span>
-                {item.unreadCount && (
-                  <span className="nav-badge-count">{item.unreadCount}</span>
+                {item.badge && (
+                  <span className="nav-badge-count">{item.badge}</span>
                 )}
               </button>
             );
@@ -136,8 +144,8 @@ export function AppShell({
 
           <button
             type="button"
-            className={`nav-item ${activeTab === 'settings' ? 'active' : ''}`}
-            onClick={() => handleNavClick('settings')}
+            className={`nav-item ${location.pathname === '/app/settings' ? 'active' : ''}`}
+            onClick={() => handleNavClick('/app/settings')}
             id="sidebar-nav-settings"
           >
             <Settings size={18} />
@@ -146,8 +154,8 @@ export function AppShell({
 
           <button
             type="button"
-            className={`nav-item ${activeTab === 'support' ? 'active' : ''}`}
-            onClick={() => handleNavClick('support')}
+            className="nav-item"
+            onClick={() => showToast('Help & Support coming soon!')}
             id="sidebar-nav-support"
           >
             <HelpCircle size={18} />
@@ -157,7 +165,7 @@ export function AppShell({
           <button
             type="button"
             className="nav-item nav-logout"
-            onClick={() => showToast('Session locked. Demo session active as Karthik.')}
+            onClick={handleLogout}
             id="sidebar-nav-logout"
           >
             <LogOut size={18} />
@@ -168,13 +176,17 @@ export function AppShell({
         <div className="sidebar-footer">
           <div
             className="user-snippet"
-            onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
+            onClick={() => handleNavClick('/app/profile')}
             style={{ cursor: 'pointer' }}
           >
-            <div className="avatar">K</div>
+            {user?.profileImage || user?.avatar ? (
+              <img src={user.profileImage || user.avatar} className="avatar" alt={displayName} style={{ objectFit: 'cover' }} />
+            ) : (
+              <div className="avatar">{initials}</div>
+            )}
             <div className="user-info">
-              <span className="user-name">Karthik</span>
-              <span className="user-role">SR University • Computer Science</span>
+              <span className="user-name">{displayName}</span>
+              <span className="user-role">{college} &bull; {branch}</span>
             </div>
           </div>
         </div>
@@ -195,7 +207,7 @@ export function AppShell({
             </button>
 
             <div className="topbar-breadcrumbs">
-              <span onClick={() => handleNavClick('dashboard')} style={{ cursor: 'pointer' }}>
+              <span onClick={() => handleNavClick('/app')} style={{ cursor: 'pointer' }}>
                 Vynora Connect
               </span>
               <span>/</span>
@@ -213,7 +225,7 @@ export function AppShell({
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' && searchQuery.trim()) {
-                    showToast(`Searching for "${searchQuery}" across campus network...`);
+                    showToast(`Searching for "${searchQuery}"...`);
                   }
                 }}
                 id="topbar-search"
@@ -222,20 +234,6 @@ export function AppShell({
           </div>
 
           <div className="topbar-right">
-            {/* Live Backend Indicator */}
-            <div
-              className="api-status-pill"
-              title={
-                isLiveBackend
-                  ? 'Connected to live Express backend (/api/v1)'
-                  : 'Running with Dev Mock Adapter (Express server offline)'
-              }
-            >
-              <span className={`status-dot ${isLiveBackend ? 'active' : 'mock'}`} />
-              <Server size={13} style={{ color: 'var(--text-muted)' }} />
-              <span>{isLiveBackend ? 'Live Backend API' : 'Dev Adapter (Mock)'}</span>
-            </div>
-
             {/* Notifications Button & Dropdown */}
             <div className="topbar-popover-anchor">
               <button
@@ -287,7 +285,7 @@ export function AppShell({
             <button
               type="button"
               className="topbar-icon-btn"
-              onClick={() => handleNavClick('messages')}
+              onClick={() => handleNavClick('/app/messages')}
               title="Messages"
               aria-label="Messages"
               id="topbar-messages-btn"
@@ -308,22 +306,26 @@ export function AppShell({
                 aria-label="User profile menu"
                 id="topbar-user-menu-btn"
               >
-                <div className="avatar-small">K</div>
-                <span className="profile-btn-name">Karthik</span>
+                {user?.profileImage || user?.avatar ? (
+                  <img src={user.profileImage || user.avatar} className="avatar-small" alt={firstName} style={{ objectFit: 'cover', borderRadius: '50%' }} />
+                ) : (
+                  <div className="avatar-small">{initials}</div>
+                )}
+                <span className="profile-btn-name">{firstName}</span>
                 <ChevronDown size={14} />
               </button>
 
               {profileDropdownOpen && (
                 <div className="profile-dropdown-menu">
                   <div className="profile-menu-header">
-                    <div className="profile-menu-name">Karthik</div>
-                    <div className="profile-menu-sub">SR University • Computer Science</div>
+                    <div className="profile-menu-name">{displayName}</div>
+                    <div className="profile-menu-sub">{college} &bull; {branch}</div>
                   </div>
                   <div className="profile-menu-divider" />
                   <button
                     type="button"
                     className="profile-menu-item"
-                    onClick={() => handleNavClick('profile')}
+                    onClick={() => handleNavClick('/app/profile')}
                   >
                     <User size={15} />
                     <span>My Profile</span>
@@ -331,7 +333,7 @@ export function AppShell({
                   <button
                     type="button"
                     className="profile-menu-item"
-                    onClick={() => handleNavClick('dashboard')}
+                    onClick={() => handleNavClick('/app')}
                   >
                     <Compass size={15} />
                     <span>Home Dashboard</span>
@@ -339,19 +341,16 @@ export function AppShell({
                   <button
                     type="button"
                     className="profile-menu-item"
-                    onClick={() => handleNavClick('settings')}
+                    onClick={() => handleNavClick('/app/settings')}
                   >
                     <Settings size={15} />
-                    <span>Settings &amp; Privacy</span>
+                    <span>Settings & Privacy</span>
                   </button>
                   <div className="profile-menu-divider" />
                   <button
                     type="button"
                     className="profile-menu-item text-danger"
-                    onClick={() => {
-                      setProfileDropdownOpen(false);
-                      showToast('Demonstration session active.');
-                    }}
+                    onClick={handleLogout}
                   >
                     <LogOut size={15} />
                     <span>Logout</span>
@@ -362,9 +361,19 @@ export function AppShell({
           </div>
         </header>
 
-        {/* Content View */}
-        <main className="page-container">{children}</main>
+        {/* Content View — rendered via React Router Outlet */}
+        <main className="page-container">
+          <Outlet />
+        </main>
       </div>
+
+      {/* Mobile overlay */}
+      {mobileMenuOpen && (
+        <div
+          className="sidebar-overlay"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+      )}
     </div>
   );
 }

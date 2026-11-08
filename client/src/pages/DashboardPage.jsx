@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { WelcomeBanner } from '../components/dashboard/WelcomeBanner.jsx';
 import { QuickActions } from '../components/dashboard/QuickActions.jsx';
 import { DashboardStats } from '../components/dashboard/DashboardStats.jsx';
@@ -17,8 +18,11 @@ import {
 } from '../components/dashboard/InteractiveModals.jsx';
 import { getDashboardData } from '../services/dashboardService.js';
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton.jsx';
+import { useAuth } from '../context/AuthContext.jsx';
 
 export function DashboardPage({ onNavigate, onStatusUpdate }) {
+  const navigate = useNavigate();
+  const { user: authUser } = useAuth();
   const [dashboardState, setDashboardState] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -27,6 +31,28 @@ export function DashboardPage({ onNavigate, onStatusUpdate }) {
   const [selectedProject, setSelectedProject] = useState(null);
   const [selectedMentor, setSelectedMentor] = useState(null);
   const [isCreateProjectOpen, setIsCreateProjectOpen] = useState(false);
+
+  const handleNavigate = (target) => {
+    if (typeof onNavigate === 'function') {
+      onNavigate(target);
+      return;
+    }
+    const routeMap = {
+      dashboard: '/app',
+      network: '/app/network',
+      opportunities: '/app/opportunities',
+      teams: '/app/projects',
+      projects: '/app/projects',
+      events: '/app/clubs',
+      clubs: '/app/clubs',
+      messages: '/app/messages',
+      mentorship: '/app/mentorship',
+      resources: '/app/resources',
+      profile: '/app/profile',
+      settings: '/app/settings',
+    };
+    navigate(routeMap[target] || `/app/${target}`);
+  };
 
   const fetchDashboard = async () => {
     try {
@@ -54,14 +80,14 @@ export function DashboardPage({ onNavigate, onStatusUpdate }) {
     if (actionKey === 'create-project-modal') {
       setIsCreateProjectOpen(true);
     } else {
-      onNavigate(actionKey);
+      handleNavigate(actionKey);
     }
   };
 
   const handlePulseAction = (action) => {
     if (!action) return;
     if (action.targetTab) {
-      onNavigate(action.targetTab);
+      handleNavigate(action.targetTab);
     }
   };
 
@@ -85,7 +111,7 @@ export function DashboardPage({ onNavigate, onStatusUpdate }) {
   }
 
   const {
-    user,
+    user: dashboardUser,
     stats,
     upcomingEvents = [],
     collaborationProjects = [],
@@ -94,6 +120,13 @@ export function DashboardPage({ onNavigate, onStatusUpdate }) {
     resources = [],
     mentors = [],
   } = dashboardState || {};
+
+  // Merge authUser with dashboardUser for real personalization
+  const user = {
+    ...dashboardUser,
+    ...(authUser || {}),
+    name: authUser?.displayName || authUser?.firstName || dashboardUser?.name || 'Student',
+  };
 
   return (
     <div className="dashboard-page-container">
@@ -112,7 +145,7 @@ export function DashboardPage({ onNavigate, onStatusUpdate }) {
       {/* Dashboard KPI Statistics */}
       <DashboardStats
         stats={stats}
-        onStatClick={(key) => onNavigate(key)}
+        onStatClick={(key) => handleNavigate(key)}
       />
 
       {/* Two-Column Responsive Grid */}
@@ -125,29 +158,29 @@ export function DashboardPage({ onNavigate, onStatusUpdate }) {
           {/* Opportunities Section */}
           <RecentOpportunitiesSection
             opportunities={opportunities}
-            onViewAll={() => onNavigate('opportunities')}
-            onSelectOpportunity={() => onNavigate('opportunities')}
+            onViewAll={() => handleNavigate('opportunities')}
+            onSelectOpportunity={() => handleNavigate('opportunities')}
           />
 
           {/* Upcoming Events Section */}
           <UpcomingEventsSection
             events={upcomingEvents}
-            onViewAll={() => onNavigate('events')}
+            onViewAll={() => handleNavigate('events')}
             onSelectEvent={(evt) => setSelectedEvent(evt)}
           />
 
           {/* Projects Seeking Collaborators Section */}
           <CollaborationProjectsSection
             projects={collaborationProjects}
-            onViewAll={() => onNavigate('teams')}
+            onViewAll={() => handleNavigate('teams')}
             onSelectProject={(prj) => setSelectedProject(prj)}
           />
 
           {/* Shared Study Resources Section */}
           <RecentResourcesSection
             resources={resources}
-            onViewAll={() => onNavigate('resources')}
-            onSelectResource={() => onNavigate('resources')}
+            onViewAll={() => handleNavigate('resources')}
+            onSelectResource={() => handleNavigate('resources')}
           />
         </div>
 
@@ -156,13 +189,13 @@ export function DashboardPage({ onNavigate, onStatusUpdate }) {
           {/* People You May Know */}
           <StudentRecommendationsSection
             students={recommendations}
-            onViewNetwork={() => onNavigate('network')}
+            onViewNetwork={() => handleNavigate('network')}
           />
 
           {/* Campus Mentorship */}
           <MentorshipPreviewSection
             mentors={mentors}
-            onViewMentorship={() => onNavigate('mentorship')}
+            onViewMentorship={() => handleNavigate('mentorship')}
             onSelectMentor={(mnt) => setSelectedMentor(mnt)}
           />
         </div>
@@ -199,3 +232,5 @@ export function DashboardPage({ onNavigate, onStatusUpdate }) {
     </div>
   );
 }
+
+export default DashboardPage;

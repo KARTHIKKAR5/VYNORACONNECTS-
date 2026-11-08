@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
+import authRoutes from './modules/auth/auth.routes.js';
 import dashboardRoutes from './modules/dashboard/dashboard.routes.js';
 import pulseRoutes from './modules/pulse/pulse.routes.js';
 import { modulesAdapter } from './modules/integrations/modules.adapter.js';
@@ -30,6 +31,9 @@ app.get('/api/v1/health', (req, res) => {
     },
   });
 });
+
+// Auth Module
+app.use('/api/v1/auth', authRoutes);
 
 // Primary Modules
 app.use('/api/v1/dashboard', dashboardRoutes);
@@ -65,4 +69,3 @@ app.get('/api/v1/resources', async (req, res, next) => {
 // Error handling
 app.use(notFoundHandler);
 app.use(errorHandler);
-

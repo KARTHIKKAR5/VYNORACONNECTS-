@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Users,
   Layers,
@@ -10,12 +11,12 @@ import {
   HelpCircle,
   ArrowLeft,
   Sparkles,
+  Calendar,
 } from 'lucide-react';
 
 const MODULE_METADATA = {
   network: {
     title: 'Campus Network',
-    owner: 'Ram',
     tagline: 'Connect with students across India based on major, interests, and colleges.',
     icon: Users,
     color: '#6366F1',
@@ -26,9 +27,8 @@ const MODULE_METADATA = {
       'Department-specific study group networking',
     ],
   },
-  teams: {
+  projects: {
     title: 'Teams & Projects',
-    owner: 'Varsh',
     tagline: 'Form multidisciplinary project squads and build capstone projects together.',
     icon: Layers,
     color: '#A855F7',
@@ -39,9 +39,20 @@ const MODULE_METADATA = {
       'Inter-college hackathon team formation matchmaking',
     ],
   },
-  events: {
+  teams: {
+    title: 'Teams & Projects',
+    tagline: 'Form multidisciplinary project squads and build capstone projects together.',
+    icon: Layers,
+    color: '#A855F7',
+    features: [
+      'Role-based squad recruitment (Frontend, Backend, AI, UI/UX)',
+      'GitHub repository and sprint milestone syncing',
+      'Team workspace with shared kanban and asset boards',
+      'Inter-college hackathon team formation matchmaking',
+    ],
+  },
+  clubs: {
     title: 'Clubs & Events',
-    owner: 'Sindhu',
     tagline: 'Discover hackathons, guest lectures, technical symposiums, and cultural fests.',
     icon: GraduationCap,
     color: '#F59E0B',
@@ -52,22 +63,32 @@ const MODULE_METADATA = {
       'Live attendee chat and workshop streaming links',
     ],
   },
+  events: {
+    title: 'Clubs & Events',
+    tagline: 'Discover hackathons, guest lectures, technical symposiums, and cultural fests.',
+    icon: Calendar,
+    color: '#F59E0B',
+    features: [
+      'Cross-college event discovery with verified host badges',
+      'Instant digital QR event passes and calendar integration',
+      'Club showcase pages with student leader contacts',
+      'Live attendee chat and workshop streaming links',
+    ],
+  },
   mentorship: {
     title: 'Mentorship & Student Services',
-    owner: 'Surya',
     tagline: 'Book 1-on-1 guidance sessions with senior students, alumni, and industry engineers.',
     icon: Compass,
     color: '#EC4899',
     features: [
       'Verified alumni and senior mentor profiles',
-      'Automated office-hour booking and Google Calendar sync',
+      'Automated office-hour booking and calendar sync',
       'Resume review, system design, and mock interview tracks',
       'Student feedback and verified mentor review badges',
     ],
   },
   messages: {
     title: 'Real-time Communications',
-    owner: 'Siri',
     tagline: 'Direct messaging, peer study group chats, and project team channels.',
     icon: MessageSquare,
     color: '#3B82F6',
@@ -80,7 +101,6 @@ const MODULE_METADATA = {
   },
   profile: {
     title: 'My Student Profile',
-    owner: 'Core Team',
     tagline: 'Showcase your college credentials, verified skills, projects, and achievements.',
     icon: User,
     color: '#10B981',
@@ -93,7 +113,6 @@ const MODULE_METADATA = {
   },
   settings: {
     title: 'Account & Platform Settings',
-    owner: 'Core Team',
     tagline: 'Manage privacy, notification alerts, themes, and connected accounts.',
     icon: Settings,
     color: '#6B7280',
@@ -106,7 +125,6 @@ const MODULE_METADATA = {
   },
   support: {
     title: 'Help & Campus Support',
-    owner: 'Core Team',
     tagline: 'Guides, FAQs, and direct helpdesk for Vynora Connect.',
     icon: HelpCircle,
     color: '#3B82F6',
@@ -120,9 +138,9 @@ const MODULE_METADATA = {
 };
 
 export function ComingSoonModule({ moduleId, onBackToDashboard }) {
+  const navigate = useNavigate();
   const meta = MODULE_METADATA[moduleId] || {
     title: 'Module In Development',
-    owner: 'Vynora Team',
     tagline: 'This section is currently undergoing active integration.',
     icon: Sparkles,
     color: '#6366F1',
@@ -131,13 +149,25 @@ export function ComingSoonModule({ moduleId, onBackToDashboard }) {
 
   const Icon = meta.icon;
 
+  const handleBack = () => {
+    if (typeof onBackToDashboard === 'function') {
+      onBackToDashboard();
+    } else {
+      navigate('/app');
+    }
+  };
+
   return (
     <div className="coming-soon-module-page">
       <div className="module-status-card">
         <div className="module-status-header">
           <div
             className="module-icon-large"
-            style={{ backgroundColor: `${meta.color}15`, color: meta.color, border: `1px solid ${meta.color}35` }}
+            style={{
+              backgroundColor: `${meta.color}15`,
+              color: meta.color,
+              border: `1px solid ${meta.color}35`,
+            }}
           >
             <Icon size={32} />
           </div>
@@ -174,7 +204,7 @@ export function ComingSoonModule({ moduleId, onBackToDashboard }) {
           <button
             type="button"
             className="btn btn-primary"
-            onClick={onBackToDashboard}
+            onClick={handleBack}
             id="back-to-home-btn"
           >
             <ArrowLeft size={16} />
@@ -186,3 +216,4 @@ export function ComingSoonModule({ moduleId, onBackToDashboard }) {
   );
 }
 
+export default ComingSoonModule;
