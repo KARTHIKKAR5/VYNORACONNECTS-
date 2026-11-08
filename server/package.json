@@ -1,6 +1,10 @@
 {
   "name": "vynora-connect-backend",
   "version": "1.0.0",
+  "description": "Vynora Connect - Shared Modular Express Backend",
+  "main": "src/server.js",
+  "scripts": {
+    "test": "node --test __tests__/"
   "description": "Communication & Notifications Module Backend for Vynora Connect",
   "main": "src/server.js",
   "type": "module",
@@ -12,6 +16,10 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "mongoose": "^8.9.2"
+  }
+}
+
     "mongoose": "^8.9.2",
     "socket.io": "^4.8.1"
   }
