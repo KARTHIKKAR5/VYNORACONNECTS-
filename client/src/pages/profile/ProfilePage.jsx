@@ -188,10 +188,16 @@ export function ProfilePage() {
           <div className="profile-title-block">
             <div className="profile-name-row">
               <h1 className="profile-display-name">{displayName}</h1>
-              <span className="profile-role-pill">
-                <Sparkles size={12} />
-                <span>Verified Student</span>
-              </span>
+              {user?.isVerified ? (
+                <span className="profile-role-pill">
+                  <Sparkles size={12} />
+                  <span>Verified Student</span>
+                </span>
+              ) : (
+                <span className="profile-role-pill" style={{ opacity: 0.8 }}>
+                  <span>Student</span>
+                </span>
+              )}
             </div>
 
             <p className="profile-headline">

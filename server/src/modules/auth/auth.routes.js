@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { authController } from './auth.controller.js';
-import { authenticateUser } from '../../middleware/auth.middleware.js';
+import { requireAuth } from '../../middleware/auth.middleware.js';
 
 const router = Router();
 
@@ -10,8 +10,8 @@ router.post('/login', authController.login);
 router.post('/logout', authController.logout);
 router.post('/forgot-password', authController.forgotPassword);
 
-// Protected routes
-router.get('/me', authenticateUser, authController.getMe);
-router.patch('/me', authenticateUser, authController.updateMe);
+// Strictly protected routes (require valid JWT)
+router.get('/me', requireAuth, authController.getMe);
+router.patch('/me', requireAuth, authController.updateMe);
 
 export default router;

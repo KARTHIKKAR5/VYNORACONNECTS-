@@ -2,6 +2,7 @@ import bcryptjs from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
 import { User } from '../../models/User.model.js';
+import { isDbConnected } from '../../config/db.js';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'vynora-connect-dev-secret-2026';
 const JWT_EXPIRES_IN = '7d';
@@ -35,16 +36,25 @@ const DEMO_USER_DTO = {
   profileVisibility: 'students_only',
   role: 'student',
   emailVerified: true,
+  isVerified: true,
   accountStatus: 'active',
 };
 
 export const authService = {
   async register(data) {
+    if (!isDbConnected()) {
+      const err = new Error('Database is offline. MongoDB is not connected; account cannot be persisted.');
+      err.statusCode = 503;
+      err.code = 'DATABASE_OFFLINE';
+      throw err;
+    }
+
     const email = (data.email || '').toLowerCase().trim();
     const existing = await User.findOne({ email });
     if (existing) {
       const err = new Error('An account with this email already exists.');
       err.statusCode = 409;
+      err.code = 'DUPLICATE_ACCOUNT';
       throw err;
     }
     const passwordHash = await bcryptjs.hash(data.password, 12);
@@ -80,6 +90,8 @@ export const authService = {
       linkedinUrl: data.linkedinUrl || '',
       profileVisibility: data.profileVisibility || 'students_only',
       role: 'student',
+      isVerified: false,
+      emailVerified: false,
       accountStatus: 'active',
     });
     await user.save();
@@ -92,16 +104,34 @@ export const authService = {
   },
 
   async login(email, password) {
+    if (!isDbConnected()) {
+      // In offline mode with demo accounts, allow demo login or fail cleanly
+      if (email.toLowerCase().trim() === 'karthik@vynora.edu') {
+        const token = jwt.sign(
+          { id: DEMO_USER_DTO.id, email: DEMO_USER_DTO.email, role: DEMO_USER_DTO.role, name: DEMO_USER_DTO.displayName },
+          JWT_SECRET,
+          { expiresIn: JWT_EXPIRES_IN }
+        );
+        return { user: DEMO_USER_DTO, token };
+      }
+      const err = new Error('Database is offline. MongoDB is not connected.');
+      err.statusCode = 503;
+      err.code = 'DATABASE_OFFLINE';
+      throw err;
+    }
+
     const user = await User.findOne({ email: email.toLowerCase().trim() });
     if (!user) {
       const err = new Error('Invalid email or password.');
       err.statusCode = 401;
+      err.code = 'INVALID_CREDENTIALS';
       throw err;
     }
     const valid = await bcryptjs.compare(password, user.passwordHash);
     if (!valid) {
       const err = new Error('Invalid email or password.');
       err.statusCode = 401;
+      err.code = 'INVALID_CREDENTIALS';
       throw err;
     }
     const token = jwt.sign(
@@ -113,7 +143,7 @@ export const authService = {
   },
 
   async getProfile(userId) {
-    if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
+    if (!isDbConnected() || !userId || !mongoose.Types.ObjectId.isValid(userId)) {
       return { ...DEMO_USER_DTO };
     }
     const user = await User.findById(userId);
@@ -154,7 +184,7 @@ export const authService = {
       if (updates[key] !== undefined) sanitized[key] = updates[key];
     }
 
-    if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
+    if (!isDbConnected() || !userId || !mongoose.Types.ObjectId.isValid(userId)) {
       const first = sanitized.firstName || DEMO_USER_DTO.firstName;
       const last = sanitized.lastName !== undefined ? sanitized.lastName : DEMO_USER_DTO.lastName;
       return {

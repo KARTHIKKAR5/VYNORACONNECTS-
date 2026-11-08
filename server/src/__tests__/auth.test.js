@@ -73,3 +73,69 @@ describe('Auth Validators', () => {
     });
   });
 });
+
+
+import { requireAuth } from '../middleware/auth.middleware.js';
+import { authService } from '../modules/auth/auth.service.js';
+
+describe('requireAuth Middleware', () => {
+  it('should return 401 if Authorization header is missing', () => {
+    let statusCode = null;
+    let jsonBody = null;
+    const req = { headers: {} };
+    const res = {
+      status: (code) => {
+        statusCode = code;
+        return {
+          json: (body) => {
+            jsonBody = body;
+          },
+        };
+      },
+    };
+    const next = () => {};
+
+    requireAuth(req, res, next);
+    expect(statusCode).toBe(401);
+    expect(jsonBody.error.code).toBe('UNAUTHORIZED');
+  });
+
+  it('should return 401 if token is malformed', () => {
+    let statusCode = null;
+    let jsonBody = null;
+    const req = { headers: { authorization: 'Bearer invalid-token-string' } };
+    const res = {
+      status: (code) => {
+        statusCode = code;
+        return {
+          json: (body) => {
+            jsonBody = body;
+          },
+        };
+      },
+    };
+    const next = () => {};
+
+    requireAuth(req, res, next);
+    expect(statusCode).toBe(401);
+    expect(jsonBody.error.code).toBe('UNAUTHORIZED');
+  });
+});
+
+describe('Database Offline Handling', () => {
+  it('should reject registration with 503 when database is offline', async () => {
+    await expect(
+      authService.register({
+        firstName: 'Jane',
+        email: 'jane@vynora.edu',
+        password: 'Password123!',
+      })
+    ).rejects.toThrow('Database is offline');
+  });
+
+  it('should reject login for non-demo email with 503 when database is offline', async () => {
+    await expect(
+      authService.login('unknown@vynora.edu', 'Password123!')
+    ).rejects.toThrow('Database is offline');
+  });
+});

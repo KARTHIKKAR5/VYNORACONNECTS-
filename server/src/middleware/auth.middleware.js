@@ -16,9 +16,8 @@ export const DEMO_USER = {
 };
 
 /**
- * Authentication middleware
+ * Authentication middleware for general endpoints (e.g. Dashboard)
  * Validates JWT if provided, or provides default authenticated Karthik profile in demo mode.
- * Guarantees req.user is set authoritatively on the server side.
  */
 export function authenticateUser(req, res, next) {
   const authHeader = req.headers.authorization;
@@ -37,7 +36,6 @@ export function authenticateUser(req, res, next) {
       };
       return next();
     } catch {
-      // In production, reject invalid tokens; in development, fall back gracefully to demo user
       if (process.env.NODE_ENV === 'production') {
         return res.status(401).json({
           success: false,
@@ -55,3 +53,42 @@ export function authenticateUser(req, res, next) {
   next();
 }
 
+/**
+ * Strict authentication middleware for sensitive user account endpoints (e.g. /auth/me)
+ * Requires a valid, cryptographically verified Bearer JWT token.
+ */
+export function requireAuth(req, res, next) {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({
+      success: false,
+      error: {
+        code: 'UNAUTHORIZED',
+        message: 'Authentication token required.',
+      },
+    });
+  }
+
+  const token = authHeader.split(' ')[1];
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    req.user = {
+      id: decoded.id || decoded.sub,
+      name: decoded.name,
+      email: decoded.email,
+      college: decoded.college,
+      department: decoded.department,
+      role: decoded.role || 'student',
+    };
+    return next();
+  } catch (_err) {
+    return res.status(401).json({
+      success: false,
+      error: {
+        code: 'UNAUTHORIZED',
+        message: 'Invalid or expired session token.',
+      },
+    });
+  }
+}
