@@ -1,0 +1,21 @@
+{
+  "name": "vynora-connects",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Vynora Connect - Inter-college student networking, resources, and collaboration platform",
+  "scripts": {
+    "dev": "npm --prefix client run dev",
+    "build": "npm --prefix client run build",
+    "test": "npm --prefix client test",
+    "test:backend": "node --test server/__tests__/",
+    "test:all": "npm test && npm run test:backend"
+  },
+  "keywords": [
+    "vynora",
+    "student-network",
+    "campus-network"
+  ],
+  "author": "Vynora Connect Team",
+  "license": "ISC"
+}
+
