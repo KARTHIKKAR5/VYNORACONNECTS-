@@ -4,6 +4,14 @@
  */
 
 const API_BASE_URL = import.meta.env?.VITE_API_BASE_URL || '/api/v1';
+ * Vynora Connect — Central API Client
+ * Standardized HTTP request handler with error wrapping, timeouts, and authorization headers.
+ */
+
+const API_BASE_URL =
+  typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_BASE_URL
+    ? import.meta.env.VITE_API_BASE_URL
+    : '/api/v1';
 
 export class ApiError extends Error {
   constructor(message, status, code = 'API_ERROR', details = []) {
@@ -19,6 +27,13 @@ export async function request(endpoint, options = {}) {
   const url = `${API_BASE_URL}${endpoint}`;
   const headers = {
     'Content-Type': 'application/json',
+  const token = typeof localStorage !== 'undefined' ? localStorage.getItem('vynora_token') : null;
+  const currentUserId = typeof localStorage !== 'undefined' ? localStorage.getItem('vynora_user_id') : null;
+
+  const headers = {
+    'Content-Type': 'application/json',
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    ...(currentUserId ? { 'x-user-id': currentUserId } : {}),
     ...(options.headers || {}),
   };
 
@@ -34,6 +49,15 @@ export async function request(endpoint, options = {}) {
 
     const response = await fetch(url, config);
     clearTimeout(timeoutId);
+    const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+    let timeoutId = null;
+    if (controller) {
+      timeoutId = setTimeout(() => controller.abort(), 8000);
+      config.signal = controller.signal;
+    }
+
+    const response = await fetch(url, config);
+    if (timeoutId) clearTimeout(timeoutId);
 
     const data = await response.json().catch(() => null);
 
@@ -54,6 +78,10 @@ export async function request(endpoint, options = {}) {
     }
     throw new ApiError(
       error.message || 'Unable to connect to Vynora backend server.',
+      throw new ApiError('Request timed out. Please check your network connection.', 408, 'TIMEOUT');
+    }
+    throw new ApiError(
+      error.message || 'Unable to connect to the Vynora backend API.',
       0,
       'NETWORK_ERROR'
     );
@@ -76,3 +104,23 @@ export const apiClient = {
   patch: (endpoint, body) => request(endpoint, { method: 'PATCH', body: JSON.stringify(body) }),
   delete: (endpoint) => request(endpoint, { method: 'DELETE' }),
 };
+  post: (endpoint, body) =>
+    request(endpoint, {
+      method: 'POST',
+      body: body ? JSON.stringify(body) : undefined,
+    }),
+  put: (endpoint, body) =>
+    request(endpoint, {
+      method: 'PUT',
+      body: body ? JSON.stringify(body) : undefined,
+    }),
+  patch: (endpoint, body) =>
+    request(endpoint, {
+      method: 'PATCH',
+      body: body ? JSON.stringify(body) : undefined,
+    }),
+  delete: (endpoint) => request(endpoint, { method: 'DELETE' }),
+};
+
+export default apiClient;
+

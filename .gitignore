@@ -6,3 +6,12 @@ dist-ssr/
 *.local
 .vite/
 coverage/
+dist/
+client/dist/
+*.log
+node_modules/ 
+.env 
+
+/client/dist/
+# Campus Events frontend build output
+client/campus-events/dist/

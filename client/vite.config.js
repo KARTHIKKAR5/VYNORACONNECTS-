@@ -6,6 +6,7 @@ export default defineConfig({
   server: {
     port: 3000,
     open: false,
+    port: 5173,
     proxy: {
       '/api': {
         target: 'http://localhost:5000',
@@ -18,3 +19,12 @@ export default defineConfig({
     environment: 'node',
   },
 });
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [react()],
+  server: {
+    port: 3000,
+    open: false,
+  },
+});
+

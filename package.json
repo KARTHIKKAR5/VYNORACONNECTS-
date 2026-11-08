@@ -11,13 +11,19 @@
     "test": "npm --prefix client test",
     "test:server": "npm --prefix server test",
     "test:all": "npm --prefix client test && npm --prefix server test"
+    "build": "npm --prefix client run build",
+    "test": "npm --prefix client test",
+    "test:backend": "node --test server/__tests__/",
+    "test:all": "npm test && npm run test:backend"
   },
   "keywords": [
     "vynora",
     "student-network",
     "resources",
     "opportunities"
+    "campus-network"
   ],
   "author": "Vynora Connect Team",
   "license": "ISC"
 }
+
