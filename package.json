@@ -5,9 +5,12 @@
   "description": "Vynora Connect - Inter-college student networking, resources, and collaboration platform",
   "scripts": {
     "dev": "npm --prefix client run dev",
+    "server": "npm --prefix server run dev",
     "build": "npm --prefix client run build",
     "lint": "npm --prefix client run lint",
-    "test": "npm --prefix client test"
+    "test": "npm --prefix client test",
+    "test:server": "npm --prefix server test",
+    "test:all": "npm --prefix client test && npm --prefix server test"
   },
   "keywords": [
     "vynora",
