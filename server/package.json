@@ -5,6 +5,12 @@
   "main": "src/server.js",
   "scripts": {
     "test": "node --test __tests__/"
+  "description": "Communication & Notifications Module Backend for Vynora Connect",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -14,3 +20,7 @@
   }
 }
 
+    "mongoose": "^8.9.2",
+    "socket.io": "^4.8.1"
+  }
+}
