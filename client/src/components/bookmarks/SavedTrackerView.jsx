@@ -138,6 +138,11 @@ export function SavedTrackerView({ onSelectOpportunity, onSelectResource }) {
                             <span className={`deadline-badge urgency-${deadlineInfo.urgency}`}>
                               <Clock size={11} /> {deadlineInfo.label}
                             </span>
+                            {opp.isLinkUnavailable && (
+                              <span className="link-unavailable-pill" title={opp.linkUnavailableReason || 'External link has not been verified.'}>
+                                <AlertTriangle size={11} /> Link unavailable
+                              </span>
+                            )}
                           </div>
 
                           <h3
@@ -155,13 +160,41 @@ export function SavedTrackerView({ onSelectOpportunity, onSelectResource }) {
                         {/* Tracker Stage Selector */}
                         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                           <select
-                            className="form-select"
+                            className="form-select tracker-stage-select"
                             value={item.trackerStatus || 'saved'}
                             onChange={e => handleStageChange(opp.id, e.target.value)}
-                            style={{ fontSize: '0.82rem', padding: '6px 10px', minWidth: '150px' }}
+                            id={`select-stage-${opp.id}`}
+                            aria-label={`Application stage for ${opp.title}`}
+                            style={{
+                              colorScheme: 'dark',
+                              backgroundColor: 'var(--bg-card)',
+                              color: '#FFFFFF',
+                              border: '1px solid var(--border-default)',
+                              borderRadius: 'var(--radius-sm)',
+                              fontSize: '0.82rem',
+                              fontWeight: 600,
+                              padding: '6px 30px 6px 12px',
+                              minWidth: '175px',
+                              cursor: 'pointer',
+                              appearance: 'none',
+                              WebkitAppearance: 'none',
+                              MozAppearance: 'none',
+                              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23A3A3A3' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`,
+                              backgroundRepeat: 'no-repeat',
+                              backgroundPosition: 'right 10px center',
+                            }}
                           >
                             {TRACKER_STAGES.map(s => (
-                              <option key={s.value} value={s.value}>{s.label}</option>
+                              <option
+                                key={s.value}
+                                value={s.value}
+                                style={{
+                                  backgroundColor: '#1B1B1B',
+                                  color: '#FFFFFF',
+                                }}
+                              >
+                                {s.label}
+                              </option>
                             ))}
                           </select>
 
@@ -237,7 +270,14 @@ export function SavedTrackerView({ onSelectOpportunity, onSelectResource }) {
                 <div key={resource.id} className="card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                   <div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                      <span className={`card-type-badge badge-${resource.type || 'document'}`}>{resource.type || 'Resource'}</span>
+                      <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                        <span className={`card-type-badge badge-${resource.type || 'document'}`}>{resource.type || 'Resource'}</span>
+                        {resource.isLinkUnavailable && (
+                          <span className="link-unavailable-pill" title={resource.linkUnavailableReason || 'External link has not been verified.'}>
+                            <AlertTriangle size={11} /> Link unavailable
+                          </span>
+                        )}
+                      </div>
                       <button
                         type="button"
                         className="btn-icon"
@@ -275,14 +315,26 @@ export function SavedTrackerView({ onSelectOpportunity, onSelectResource }) {
                     </button>
 
                     {resource.sourceUrl && (
-                      <a
-                        href={resource.sourceUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="btn btn-outline btn-sm"
-                      >
-                        <ExternalLink size={13} /> Open
-                      </a>
+                      resource.isLinkUnavailable ? (
+                        <button
+                          type="button"
+                          className="btn btn-outline btn-sm btn-disabled-link"
+                          disabled
+                          title={resource.linkUnavailableReason || 'External link has not been verified.'}
+                          aria-disabled="true"
+                        >
+                          <ExternalLink size={13} /> Link unavailable
+                        </button>
+                      ) : (
+                        <a
+                          href={resource.sourceUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="btn btn-outline btn-sm"
+                        >
+                          <ExternalLink size={13} /> Open
+                        </a>
+                      )
                     )}
                   </div>
                 </div>

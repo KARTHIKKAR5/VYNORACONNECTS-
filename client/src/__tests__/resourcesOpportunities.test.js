@@ -27,6 +27,7 @@ import {
   getSavedOpportunities,
   getFeaturedOpportunities,
   TRACKER_STAGES,
+  SAVED_OPPORTUNITIES_STORAGE_KEY,
 } from '../services/opportunitiesService.js';
 
 import { getDeadlineInfo, isValidFutureDate } from '../utils/deadlineUtils.js';
@@ -89,7 +90,7 @@ describe('2. Learning Resources Service & Validation Tests', () => {
       branch: 'CSE',
       type: 'document',
       description: 'Detailed explanation of paging, page replacement algorithms, and TLBs.',
-      sourceUrl: 'https://github.com/vynora/os-notes',
+      sourceUrl: 'https://ocw.mit.edu/courses/6-828-operating-system-engineering-fall-2012/pages/lecture-notes-and-readings/',
     });
     assert.equal(valid.isValid, true);
     assert.equal(Object.keys(valid.errors).length, 0);
@@ -210,6 +211,46 @@ describe('3. Opportunities Hub Service & Tracker Tests', () => {
     assert.ok(validValues.includes('shortlisted'));
   });
 
+  test('preserves opportunity tracker status in sessionStorage and loads stages correctly', async () => {
+    // Setup mock sessionStorage if not in browser
+    const mockStorage = new Map();
+    const originalWindow = globalThis.window;
+    globalThis.window = {
+      sessionStorage: {
+        getItem: (k) => mockStorage.get(k) || null,
+        setItem: (k, v) => mockStorage.set(k, String(v)),
+        removeItem: (k) => mockStorage.delete(k),
+        clear: () => mockStorage.clear(),
+      },
+    };
+
+    try {
+      // Update opp-201 to 'selected'
+      await updateOpportunityTrackerStatus('opp-201', 'selected', 'Accepted offer!');
+      const storedJson = globalThis.window.sessionStorage.getItem(SAVED_OPPORTUNITIES_STORAGE_KEY);
+      assert.ok(storedJson, 'sessionStorage should contain saved opportunities JSON');
+      const parsed = JSON.parse(storedJson);
+      const found201 = parsed.find(o => o.opportunityId === 'opp-201');
+      assert.equal(found201?.trackerStatus, 'selected');
+
+      // Update opp-202 to 'shortlisted'
+      await updateOpportunityTrackerStatus('opp-202', 'shortlisted', 'Invited to demo day');
+      const savedList = await getSavedOpportunities();
+      const opp202Item = savedList.find(s => s.opportunityId === 'opp-202');
+      assert.equal(opp202Item?.trackerStatus, 'shortlisted');
+
+      // Reset back to initial states
+      await updateOpportunityTrackerStatus('opp-201', 'planning', 'Resume tailored for systems roles. Applying next Monday.');
+      await updateOpportunityTrackerStatus('opp-202', 'applied', 'Registered for Arthaton AI for Finance. Preparing project submission.');
+    } finally {
+      if (originalWindow) {
+        globalThis.window = originalWindow;
+      } else {
+        delete globalThis.window;
+      }
+    }
+  });
+
   test('exports featured opportunities matching Karthik dashboard contract', async () => {
     const featured = await getFeaturedOpportunities(3);
     assert.ok(Array.isArray(featured));
@@ -235,6 +276,83 @@ describe('4. Security & Isolation Checks', () => {
     assert.equal(validateUrl('ftp://example.com'), false);
     assert.equal(validateUrl('https://valid-domain.com/path'), true);
     assert.equal(validateUrl('http://valid-domain.com/path'), true);
+  });
+});
+
+describe('5. Unverified External URL Handling & Safety Checks', () => {
+  test('verifies all educational resources have confirmed, active, and verified destinations', async () => {
+    const { data: resources } = await getResources();
+    assert.equal(resources.length >= 5, true);
+
+    const res101 = resources.find(r => r.id === 'res-101');
+    const res102 = resources.find(r => r.id === 'res-102');
+    const res103 = resources.find(r => r.id === 'res-103');
+    const res104 = resources.find(r => r.id === 'res-104');
+    const res105 = resources.find(r => r.id === 'res-105');
+
+    // res-101: MIT 6.828 Operating Systems notes
+    assert.equal(res101.isLinkUnavailable, false);
+    assert.equal(res101.linkStatus, 'verified');
+    assert.equal(res101.sourceUrl, 'https://ocw.mit.edu/courses/6-828-operating-system-engineering-fall-2012/pages/lecture-notes-and-readings/');
+
+    // res-102: SDE placement roadmap
+    assert.equal(res102.isLinkUnavailable, false);
+    assert.equal(res102.linkStatus, 'verified');
+    assert.equal(res102.sourceUrl, 'https://roadmap.sh/software-design-architecture');
+
+    // res-103: MIT DSP coursework
+    assert.equal(res103.isLinkUnavailable, false);
+    assert.equal(res103.linkStatus, 'verified');
+    assert.equal(res103.sourceUrl, 'https://learn.mit.edu/?resource=3362&resource_title=digital-signal-processing');
+
+    // res-104: System design primer
+    assert.equal(res104.isLinkUnavailable, false);
+    assert.equal(res104.linkStatus, 'verified');
+    assert.equal(res104.sourceUrl, 'https://github.com/donnemartin/system-design-primer');
+
+    // res-105: IndiaBIX placement aptitude
+    assert.equal(res105.isLinkUnavailable, false);
+    assert.equal(res105.linkStatus, 'verified');
+    assert.equal(res105.sourceUrl, 'https://www.indiabix.com/aptitude/');
+  });
+
+  test('verifies all opportunities have confirmed, active, and verified application destinations', async () => {
+    const { data: opportunities } = await getOpportunities();
+    assert.equal(opportunities.length >= 5, true);
+
+    const opp201 = opportunities.find(o => o.id === 'opp-201');
+    const opp202 = opportunities.find(o => o.id === 'opp-202');
+    const opp203 = opportunities.find(o => o.id === 'opp-203');
+    const opp204 = opportunities.find(o => o.id === 'opp-204');
+    const opp205 = opportunities.find(o => o.id === 'opp-205');
+
+    // opp-201: Google student careers
+    assert.equal(opp201.isLinkUnavailable, false);
+    assert.equal(opp201.linkStatus, 'verified');
+    assert.equal(opp201.applicationUrl, 'https://careers.google.com/students');
+
+    // opp-202: Arthaton 2026 AI for Finance Hackathon
+    assert.equal(opp202.isLinkUnavailable, false);
+    assert.equal(opp202.linkStatus, 'verified');
+    assert.equal(opp202.title, 'Arthaton 2026 – AI for Finance Hackathon');
+    assert.equal(opp202.organizerName, 'Arthaton');
+    assert.equal(opp202.applicationUrl, 'https://arthaton.com/');
+
+    // opp-203: Zerodha tech careers
+    assert.equal(opp203.isLinkUnavailable, false);
+    assert.equal(opp203.linkStatus, 'verified');
+    assert.equal(opp203.applicationUrl, 'https://careers.zerodha.com');
+
+    // opp-204: CodeChef contests
+    assert.equal(opp204.isLinkUnavailable, false);
+    assert.equal(opp204.linkStatus, 'verified');
+    assert.equal(opp204.applicationUrl, 'https://www.codechef.com/contests');
+
+    // opp-205: IMC Scholarship & Mentorship Programme for Meritorious Young Women in Engineering
+    assert.equal(opp205.isLinkUnavailable, false);
+    assert.equal(opp205.linkStatus, 'verified');
+    assert.equal(opp205.organizerName, 'Smile Foundation');
+    assert.equal(opp205.applicationUrl, 'https://sfsp.smilefoundationindia.org/register.php?s=scholarship-mentorship-programme-for-meritorious-young-women-in-engineering-courses');
   });
 });
 

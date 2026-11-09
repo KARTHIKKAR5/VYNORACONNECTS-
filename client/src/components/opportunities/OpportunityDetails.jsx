@@ -10,6 +10,7 @@ import {
   Flag,
   Share2,
   CheckCircle2,
+  AlertTriangle,
 } from 'lucide-react';
 import { getDeadlineInfo } from '../../utils/deadlineUtils.js';
 import {
@@ -33,6 +34,8 @@ export function OpportunityDetails({ opportunity, onBack }) {
     stipendDescription,
     prizeDescription,
     applicationUrl,
+    isLinkUnavailable,
+    linkUnavailableReason = 'External link has not been verified.',
     teamMin = 1,
     teamMax = 1,
     skills = [],
@@ -93,6 +96,11 @@ export function OpportunityDetails({ opportunity, onBack }) {
               <MapPin size={12} />
               {mode === 'online' ? 'Online / Remote' : (city || mode)}
             </span>
+            {isLinkUnavailable && (
+              <span className="link-unavailable-pill" title={linkUnavailableReason}>
+                <AlertTriangle size={12} /> Link unavailable
+              </span>
+            )}
           </div>
 
           <h1 className="details-title">{title}</h1>
@@ -153,6 +161,13 @@ export function OpportunityDetails({ opportunity, onBack }) {
             </div>
           )}
 
+          {isLinkUnavailable && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 14px', borderRadius: 'var(--radius-sm)', background: 'rgba(245, 158, 11, 0.1)', border: '1px solid rgba(245, 158, 11, 0.25)', color: 'var(--accent-warning)', fontSize: '0.82rem', marginTop: '16px' }}>
+              <AlertTriangle size={15} style={{ flexShrink: 0 }} />
+              <span>The external application link has not been verified and has been disabled to prevent broken navigation.</span>
+            </div>
+          )}
+
           {/* Personal Application Tracker Section */}
           <div style={{ marginTop: '30px', padding: '18px', background: 'var(--bg-elevated)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-default)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
@@ -210,16 +225,29 @@ export function OpportunityDetails({ opportunity, onBack }) {
         <div className="details-actions-bar">
           <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
             {applicationUrl && (
-              <a
-                href={applicationUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn btn-primary"
-                style={{ opacity: deadlineInfo.isExpired ? 0.6 : 1 }}
-              >
-                <ExternalLink size={16} />
-                {deadlineInfo.isExpired ? 'Application Closed' : 'Apply on Official Site'}
-              </a>
+              isLinkUnavailable ? (
+                <button
+                  type="button"
+                  className="btn btn-primary btn-disabled-link"
+                  disabled
+                  title={linkUnavailableReason}
+                  aria-disabled="true"
+                >
+                  <ExternalLink size={16} />
+                  Link unavailable
+                </button>
+              ) : (
+                <a
+                  href={applicationUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-primary"
+                  style={{ opacity: deadlineInfo.isExpired ? 0.6 : 1 }}
+                >
+                  <ExternalLink size={16} />
+                  {deadlineInfo.isExpired ? 'Application Closed' : 'Apply on Official Site'}
+                </a>
+              )
             )}
 
             <button

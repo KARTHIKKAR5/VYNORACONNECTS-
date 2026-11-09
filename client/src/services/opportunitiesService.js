@@ -99,27 +99,31 @@ const INITIAL_MOCK_OPPORTUNITIES = [
     city: 'Bengaluru / Hyderabad',
     stipendDescription: '₹1,25,000 / month + Relocation',
     applicationUrl: 'https://careers.google.com/students',
+    isLinkUnavailable: false,
+    linkStatus: 'verified',
     createdAt: '2026-10-20T08:00:00Z',
     status: 'published',
     skills: ['distributed-systems', 'c++', 'go', 'python', 'cloud'],
   },
   {
     id: 'opp-202',
-    title: 'HackVynora 2026 — Inter-College AI & Web3 Hackathon',
-    organizerName: 'Vynora Campus Innovation Lab',
+    title: 'Arthaton 2026 – AI for Finance Hackathon',
+    organizerName: 'Arthaton',
     type: 'hackathon',
-    description: 'A 36-hour flagship inter-college hackathon empowering cross-campus student teams to build multimodal AI tools, student productivity apps, and decentralized protocols.',
-    eligibility: 'Open to all currently enrolled college students in India. Teams of 2 to 4 members.',
-    deadlineAt: '2026-11-20T18:00:00Z',
+    description: 'Online AI for finance hackathon challenging students to build intelligent fintech solutions, automated analytics, and financial workflow models. Free entry with cash awards for top teams.',
+    eligibility: 'Open to student builders, developers, and fintech enthusiasts. Participate solo or in teams of up to 3 members.',
+    deadlineAt: '2026-11-15T18:29:59Z',
     mode: 'online',
-    city: 'Virtual',
-    prizeDescription: '₹3,00,000 Cash Pool + Cloud Credits',
-    teamMin: 2,
-    teamMax: 4,
-    applicationUrl: 'https://hackvynora.devpost.com',
+    city: 'Online / Remote',
+    prizeDescription: '₹10,000 (1st) • ₹5,000 (2nd) • ₹3,000 (3rd)',
+    teamMin: 1,
+    teamMax: 3,
+    applicationUrl: 'https://arthaton.com/',
+    isLinkUnavailable: false,
+    linkStatus: 'verified',
     createdAt: '2026-10-18T10:00:00Z',
     status: 'published',
-    skills: ['ai', 'web3', 'react', 'fastapi', 'collaboration'],
+    skills: ['ai', 'finance', 'fintech', 'python', 'machine-learning'],
   },
   {
     id: 'opp-203',
@@ -132,7 +136,9 @@ const INITIAL_MOCK_OPPORTUNITIES = [
     mode: 'offline',
     city: 'Bengaluru',
     stipendDescription: '₹45,000 / month + Pre-placement offer',
-    applicationUrl: 'https://zerodha.tech/careers',
+    applicationUrl: 'https://careers.zerodha.com',
+    isLinkUnavailable: false,
+    linkStatus: 'verified',
     createdAt: '2026-10-15T12:30:00Z',
     status: 'published',
     skills: ['react', 'typescript', 'css', 'dom-performance'],
@@ -149,30 +155,35 @@ const INITIAL_MOCK_OPPORTUNITIES = [
     city: 'Online',
     prizeDescription: '₹1,50,000 + Tech Referrals',
     applicationUrl: 'https://www.codechef.com/contests',
+    isLinkUnavailable: false,
+    linkStatus: 'verified',
     createdAt: '2026-10-12T09:00:00Z',
     status: 'published',
     skills: ['dsa', 'competitive-programming', 'c++', 'algorithms'],
   },
   {
     id: 'opp-205',
-    title: 'NextGen Women in Engineering Leadership Scholarship 2026',
-    organizerName: 'Adobe Foundation',
+    title: 'IMC Scholarship & Mentorship Programme for Meritorious Young Women in Engineering',
+    organizerName: 'Smile Foundation',
     type: 'scholarship',
-    description: 'Merit-and-need based financial scholarship for female engineering students with demonstrated leadership in tech, open source contributions, or campus technical clubs.',
-    eligibility: 'Women undergraduates pursuing B.Tech/B.E. with CGPA >= 7.5.',
-    deadlineAt: '2026-12-31T23:59:59Z',
+    description: 'Nationwide engineering scholarship and mentorship program by Smile Foundation in collaboration with IMC supporting meritorious young women pursuing engineering degrees.',
+    eligibility: 'Meritorious young women students enrolled in engineering courses. PAN India applications invited.',
+    deadlineAt: '2026-11-15T18:29:59Z',
     mode: 'online',
     city: 'Pan-India',
-    prizeDescription: '₹1,00,000 Tuition Grant + 1:1 Mentorship',
-    applicationUrl: 'https://research.adobe.com/scholarship',
+    prizeDescription: 'Engineering Scholarship + Professional Mentorship',
+    applicationUrl: 'https://sfsp.smilefoundationindia.org/register.php?s=scholarship-mentorship-programme-for-meritorious-young-women-in-engineering-courses',
+    isLinkUnavailable: false,
+    linkStatus: 'verified',
     createdAt: '2026-10-10T11:00:00Z',
     status: 'published',
-    skills: ['leadership', 'academics', 'open-source'],
+    skills: ['scholarship', 'engineering', 'mentorship', 'women-in-tech'],
   },
 ];
 
-let localOpportunitiesStore = [...INITIAL_MOCK_OPPORTUNITIES];
-let localSavedOpportunities = [
+export const SAVED_OPPORTUNITIES_STORAGE_KEY = 'vynora_saved_opportunities';
+
+export const DEFAULT_SAVED_OPPORTUNITIES = [
   {
     opportunityId: 'opp-201',
     trackerStatus: 'planning',
@@ -182,15 +193,48 @@ let localSavedOpportunities = [
   {
     opportunityId: 'opp-202',
     trackerStatus: 'applied',
-    notes: 'Submitted project idea on Devpost. Waiting for confirmation.',
+    notes: 'Registered for Arthaton AI for Finance. Preparing project submission.',
     savedAt: '2026-10-21T14:30:00Z',
   },
 ];
+
+function getStoredSavedOpportunities() {
+  if (typeof window !== 'undefined' && window.sessionStorage) {
+    try {
+      const stored = window.sessionStorage.getItem(SAVED_OPPORTUNITIES_STORAGE_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
+        }
+      }
+    } catch {
+      // Ignore storage errors
+    }
+  }
+  return null;
+}
+
+function persistSavedOpportunities(list) {
+  if (typeof window !== 'undefined' && window.sessionStorage) {
+    try {
+      window.sessionStorage.setItem(SAVED_OPPORTUNITIES_STORAGE_KEY, JSON.stringify(list));
+    } catch {
+      // Ignore storage errors
+    }
+  }
+}
+
+let localOpportunitiesStore = [...INITIAL_MOCK_OPPORTUNITIES];
+let localSavedOpportunities = getStoredSavedOpportunities() || [...DEFAULT_SAVED_OPPORTUNITIES];
 
 /**
  * Fetch Opportunities with filters and pagination
  */
 export async function getOpportunities(params = {}) {
+  const stored = getStoredSavedOpportunities();
+  if (stored) localSavedOpportunities = stored;
+
   const { search = '', type = 'all', mode = 'all', deadlineStatus = 'all', sortBy = 'deadline', page = 1, limit = 10 } = params;
 
   try {
@@ -279,6 +323,9 @@ export async function getOpportunities(params = {}) {
  */
 export async function getOpportunityById(id) {
   if (!id) return null;
+
+  const stored = getStoredSavedOpportunities();
+  if (stored) localSavedOpportunities = stored;
 
   try {
     const res = await apiClient.get(`/opportunities/${id}`);
@@ -370,6 +417,9 @@ export async function createOpportunity(formData) {
  * Toggle Save / Bookmark for Opportunity
  */
 export async function toggleSaveOpportunity(id) {
+  const stored = getStoredSavedOpportunities();
+  if (stored) localSavedOpportunities = stored;
+
   const existingIdx = localSavedOpportunities.findIndex(s => s.opportunityId === id);
   const isSaved = existingIdx !== -1;
 
@@ -400,6 +450,7 @@ export async function toggleSaveOpportunity(id) {
     }
   }
 
+  persistSavedOpportunities(localSavedOpportunities);
   return { isSaved: !isSaved };
 }
 
@@ -407,6 +458,9 @@ export async function toggleSaveOpportunity(id) {
  * Update Application Tracker Status
  */
 export async function updateOpportunityTrackerStatus(id, trackerStatus, notes) {
+  const stored = getStoredSavedOpportunities();
+  if (stored) localSavedOpportunities = stored;
+
   try {
     const res = await apiClient.patch(`/opportunities/${id}/tracker`, { trackerStatus, notes });
     if (res?.success && res.data) {
@@ -430,6 +484,7 @@ export async function updateOpportunityTrackerStatus(id, trackerStatus, notes) {
     if (notes !== undefined) item.notes = notes;
   }
 
+  persistSavedOpportunities(localSavedOpportunities);
   return item;
 }
 
@@ -444,6 +499,11 @@ export async function getSavedOpportunities() {
     }
   } catch {
     // Local fallback
+  }
+
+  const stored = getStoredSavedOpportunities();
+  if (stored) {
+    localSavedOpportunities = stored;
   }
 
   return localSavedOpportunities.map(saved => {

@@ -6,6 +6,7 @@ import {
   MapPin,
   Bookmark,
   Calendar,
+  AlertTriangle,
 } from 'lucide-react';
 import { getDeadlineInfo } from '../../utils/deadlineUtils.js';
 import { toggleSaveOpportunity } from '../../services/opportunitiesService.js';
@@ -23,6 +24,8 @@ export function OpportunityCard({ opportunity, onSelect }) {
     stipendDescription,
     prizeDescription,
     applicationUrl,
+    isLinkUnavailable,
+    linkUnavailableReason = 'External link has not been verified.',
     skills = [],
     isSaved: initialSaved = false,
     trackerStatus,
@@ -51,6 +54,14 @@ export function OpportunityCard({ opportunity, onSelect }) {
             <Clock size={11} />
             {deadlineInfo.label}
           </span>
+          {isLinkUnavailable && (
+            <span
+              className="link-unavailable-pill"
+              title={linkUnavailableReason}
+            >
+              <AlertTriangle size={11} /> Link unavailable
+            </span>
+          )}
         </div>
 
         <button
@@ -119,19 +130,34 @@ export function OpportunityCard({ opportunity, onSelect }) {
         </button>
 
         {applicationUrl && (
-          <a
-            href={applicationUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn btn-primary btn-sm"
-            title="Open official registration or application page"
-            id={`link-apply-${id}`}
-            onClick={(e) => e.stopPropagation()}
-            style={{ opacity: deadlineInfo.isExpired ? 0.6 : 1 }}
-          >
-            <ExternalLink size={14} />
-            {deadlineInfo.isExpired ? 'Closed' : 'Apply'}
-          </a>
+          isLinkUnavailable ? (
+            <button
+              type="button"
+              className="btn btn-primary btn-sm btn-disabled-link"
+              disabled
+              title={linkUnavailableReason}
+              aria-disabled="true"
+              id={`link-apply-${id}`}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <ExternalLink size={14} />
+              Apply
+            </button>
+          ) : (
+            <a
+              href={applicationUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-primary btn-sm"
+              title="Open official registration or application page"
+              id={`link-apply-${id}`}
+              onClick={(e) => e.stopPropagation()}
+              style={{ opacity: deadlineInfo.isExpired ? 0.6 : 1 }}
+            >
+              <ExternalLink size={14} />
+              {deadlineInfo.isExpired ? 'Closed' : 'Apply'}
+            </a>
+          )
         )}
       </div>
     </article>

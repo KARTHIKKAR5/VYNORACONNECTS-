@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BookOpen, ExternalLink, ShieldCheck, User, Bookmark, ThumbsUp } from 'lucide-react';
+import { BookOpen, ExternalLink, ShieldCheck, User, Bookmark, ThumbsUp, AlertTriangle } from 'lucide-react';
 import { toggleBookmarkResource, upvoteResource } from '../../services/resourcesService.js';
 
 export function ResourceCard({ resource, onSelect }) {
@@ -14,6 +14,8 @@ export function ResourceCard({ resource, onSelect }) {
     contributor,
     sourceUrl,
     isVerified,
+    isLinkUnavailable,
+    linkUnavailableReason = 'External link has not been verified.',
     upvotesCount: initialUpvotes = 0,
     hasUpvoted: initialHasUpvoted = false,
     isBookmarked: initialBookmarked = false,
@@ -48,6 +50,14 @@ export function ResourceCard({ resource, onSelect }) {
           {branch && branch !== 'All' && (
             <span className="tag-badge" style={{ color: 'var(--text-secondary)' }}>
               {branch}
+            </span>
+          )}
+          {isLinkUnavailable && (
+            <span
+              className="link-unavailable-pill"
+              title={linkUnavailableReason}
+            >
+              <AlertTriangle size={11} /> Link unavailable
             </span>
           )}
         </div>
@@ -128,18 +138,33 @@ export function ResourceCard({ resource, onSelect }) {
         </button>
 
         {sourceUrl && (
-          <a
-            href={sourceUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn btn-outline btn-sm"
-            title="Open external source (opens in new tab)"
-            id={`link-source-${id}`}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <ExternalLink size={14} />
-            Source
-          </a>
+          isLinkUnavailable ? (
+            <button
+              type="button"
+              className="btn btn-outline btn-sm btn-disabled-link"
+              disabled
+              title={linkUnavailableReason}
+              aria-disabled="true"
+              id={`link-source-${id}`}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <ExternalLink size={14} />
+              Source
+            </button>
+          ) : (
+            <a
+              href={sourceUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-outline btn-sm"
+              title="Open external source (opens in new tab)"
+              id={`link-source-${id}`}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <ExternalLink size={14} />
+              Source
+            </a>
+          )
         )}
       </div>
     </article>

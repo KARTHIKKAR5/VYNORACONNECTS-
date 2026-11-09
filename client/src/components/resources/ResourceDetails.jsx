@@ -9,6 +9,7 @@ import {
   Bookmark,
   Flag,
   Share2,
+  AlertTriangle,
 } from 'lucide-react';
 import { toggleBookmarkResource, upvoteResource } from '../../services/resourcesService.js';
 import { ReportListingModal } from '../common/ReportListingModal.jsx';
@@ -25,6 +26,8 @@ export function ResourceDetails({ resource, onBack }) {
     contributor,
     sourceUrl,
     isVerified,
+    isLinkUnavailable,
+    linkUnavailableReason = 'External link has not been verified.',
     difficulty = 'beginner',
     createdAt,
     upvotesCount: initialUpvotes = 0,
@@ -76,6 +79,11 @@ export function ResourceDetails({ resource, onBack }) {
                 <ShieldCheck size={12} /> Verified
               </span>
             )}
+            {isLinkUnavailable && (
+              <span className="link-unavailable-pill" title={linkUnavailableReason}>
+                <AlertTriangle size={12} /> Link unavailable
+              </span>
+            )}
           </div>
 
           <h1 className="details-title">{title}</h1>
@@ -110,20 +118,40 @@ export function ResourceDetails({ resource, onBack }) {
               </div>
             </div>
           )}
+
+          {isLinkUnavailable && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 14px', borderRadius: 'var(--radius-sm)', background: 'rgba(245, 158, 11, 0.1)', border: '1px solid rgba(245, 158, 11, 0.25)', color: 'var(--accent-warning)', fontSize: '0.82rem', marginTop: '16px' }}>
+              <AlertTriangle size={15} style={{ flexShrink: 0 }} />
+              <span>The external resource link has not been verified and has been disabled to prevent broken navigation.</span>
+            </div>
+          )}
         </div>
 
         <div className="details-actions-bar">
           <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
             {sourceUrl && (
-              <a
-                href={sourceUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn btn-primary"
-              >
-                <ExternalLink size={16} />
-                Open Resource Link
-              </a>
+              isLinkUnavailable ? (
+                <button
+                  type="button"
+                  className="btn btn-secondary btn-disabled-link"
+                  disabled
+                  title={linkUnavailableReason}
+                  aria-disabled="true"
+                >
+                  <ExternalLink size={16} />
+                  Link unavailable
+                </button>
+              ) : (
+                <a
+                  href={sourceUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-primary"
+                >
+                  <ExternalLink size={16} />
+                  Open Resource Link
+                </a>
+              )
             )}
 
             <button
